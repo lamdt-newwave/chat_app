@@ -1,6 +1,6 @@
 import 'package:chat_app/blocs/app/app_cubit.dart';
 import 'package:chat_app/blocs/app_setting/app_setting_cubit.dart';
-import 'package:chat_app/common/app_configs.dart';
+import 'package:chat_app/configs/app_configs.dart';
 import 'package:chat_app/common/app_themes.dart';
 import 'package:chat_app/generated/l10n.dart';
 import 'package:chat_app/routes/app_routes.dart';
@@ -27,9 +27,10 @@ class App extends StatelessWidget {
       child: BlocBuilder<AppSettingCubit, AppSettingState>(
         builder: (context, state) {
           return GetMaterialApp(
+            color: AppConfigs.primaryColor,
             title: AppConfigs.appName,
             getPages: AppRoutes.pages,
-            initialRoute: AppRoutes.home,
+            initialRoute: AppRoutes.splash,
             debugShowCheckedModeBanner: true,
             theme: AppThemes.light,
             darkTheme: AppThemes.dark,

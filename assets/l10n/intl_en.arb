@@ -1,3 +1,8 @@
 {
-  "hello": "hello"
+  "text_on_boarding": "Connect easily with your family and friends over countries",
+  "text_policy": "Terms & Privacy Policy",
+  "button_start_messaging": "Start Messaging",
+  "text_enter_phone": "Enter Your Phone Number",
+  "text_please_confirm_country": "Please confirm your country code and enter your phone number",
+  "button_continue" : "Continue"
 }

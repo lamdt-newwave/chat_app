@@ -1,4 +1,10 @@
 <colors>
+    <color name="branch_dark">#001A83</color>
+    <color name="branch_default">#002DE3</color>
+    <color name="branch_dark_mode">#375FFF</color>
+    <color name="branch_light">#879FFF</color>
+    <color name="branch_background">#D2D5F9</color>
+
     <color name="neutral_active">#0F1828</color>
     <color name="neutral_dark">#152033</color>
     <color name="neutral_body">#1B2B48</color>

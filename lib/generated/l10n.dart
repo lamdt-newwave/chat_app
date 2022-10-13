@@ -50,11 +50,61 @@ class I10n {
     return Localizations.of<I10n>(context, I10n);
   }
 
-  /// `hello`
-  String get hello {
+  /// `Connect easily with your family and friends over countries`
+  String get text_on_boarding {
     return Intl.message(
-      'hello',
-      name: 'hello',
+      'Connect easily with your family and friends over countries',
+      name: 'text_on_boarding',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Terms & Privacy Policy`
+  String get text_policy {
+    return Intl.message(
+      'Terms & Privacy Policy',
+      name: 'text_policy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start Messaging`
+  String get button_start_messaging {
+    return Intl.message(
+      'Start Messaging',
+      name: 'button_start_messaging',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter Your Phone Number`
+  String get text_enter_phone {
+    return Intl.message(
+      'Enter Your Phone Number',
+      name: 'text_enter_phone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please confirm your country code and enter your phone number`
+  String get text_please_confirm_country {
+    return Intl.message(
+      'Please confirm your country code and enter your phone number',
+      name: 'text_please_confirm_country',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Continue`
+  String get button_continue {
+    return Intl.message(
+      'Continue',
+      name: 'button_continue',
       desc: '',
       args: [],
     );

@@ -1,5 +1,5 @@
-
 import 'package:chat_app/configs/app_env_config.dart';
+import 'package:chat_app/generated/common/colors.gen.dart';
 import 'package:flutter/material.dart';
 
 class AppConfigs {
@@ -37,5 +37,6 @@ class AppConfigs {
   static final identityMaxDate = DateTime.now();
   static final birthMinDate = DateTime(1900, 1, 1);
   static final birthMaxDate = DateTime.now();
-}
 
+  static final Color primaryColor = AppColors.neutralWhite;
+}

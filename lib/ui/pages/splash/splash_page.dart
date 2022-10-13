@@ -1,12 +1,39 @@
 import 'package:chat_app/generated/common/assets.gen.dart';
 import 'package:chat_app/generated/common/colors.gen.dart';
 import 'package:chat_app/generated/l10n.dart';
+import 'package:chat_app/ui/pages/splash/splash_cubit.dart';
 import 'package:chat_app/ui/widgets/button/normal_button.dart';
 import 'package:chat_app/ui/widgets/common/wrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class SplashPage extends StatelessWidget {
+  const SplashPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => SplashCubit(),
+      child: const SplashChildPage(),
+    );
+  }
+}
+
+class SplashChildPage extends StatefulWidget {
+  const SplashChildPage({Key? key}) : super(key: key);
+
+  @override
+  State<SplashChildPage> createState() => _SplashChildPageState();
+}
+
+class _SplashChildPageState extends State<SplashChildPage> {
+  late final SplashCubit _cubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _cubit = context.read<SplashCubit>();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,14 +77,13 @@ class HomePage extends StatelessWidget {
                 child: Text(
                   I10n.current.text_policy,
                   style: theme.textTheme.bodyText1,
-                  textAlign: TextAlign.center,
                 ),
               ),
               const SizedBox(
                 height: 16,
               ),
               NormalButton(
-                onPressed: () {},
+                onPressed: _cubit.onGoSignUpWithPhonePage,
                 child: Text(
                   I10n.current.button_start_messaging,
                   style: theme.textTheme.bodyText2

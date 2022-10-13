@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:chat_app/app.dart';
-import 'package:chat_app/common/app_configs.dart';
+import 'package:chat_app/configs/app_configs.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

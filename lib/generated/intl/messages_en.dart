@@ -22,6 +22,16 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "hello": MessageLookupByLibrary.simpleMessage("hello")
+        "button_continue": MessageLookupByLibrary.simpleMessage("Continue"),
+        "button_start_messaging":
+            MessageLookupByLibrary.simpleMessage("Start Messaging"),
+        "text_enter_phone":
+            MessageLookupByLibrary.simpleMessage("Enter Your Phone Number"),
+        "text_on_boarding": MessageLookupByLibrary.simpleMessage(
+            "Connect easily with your family and friends over countries"),
+        "text_please_confirm_country": MessageLookupByLibrary.simpleMessage(
+            "Please confirm your country code and enter your phone number"),
+        "text_policy":
+            MessageLookupByLibrary.simpleMessage("Terms & Privacy Policy")
       };
 }

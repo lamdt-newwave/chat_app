@@ -16,6 +16,21 @@ class AppColors {
   /// Color: #E94242
   static const Color accentDanger = Color(0xFFE94242);
 
+  /// Color: #D2D5F9
+  static const Color branchBackground = Color(0xFFD2D5F9);
+
+  /// Color: #001A83
+  static const Color branchDark = Color(0xFF001A83);
+
+  /// Color: #375FFF
+  static const Color branchDarkMode = Color(0xFF375FFF);
+
+  /// Color: #002DE3
+  static const Color branchDefault = Color(0xFF002DE3);
+
+  /// Color: #879FFF
+  static const Color branchLight = Color(0xFF879FFF);
+
   /// Color: #0F1828
   static const Color neutralActive = Color(0xFF0F1828);
 
