@@ -1,0 +1,16 @@
+<colors>
+    <color name="neutral_active">#0F1828</color>
+    <color name="neutral_dark">#152033</color>
+    <color name="neutral_body">#1B2B48</color>
+    <color name="neutral_weak">#A4A4A4</color>
+    <color name="neutral_disabled">#ADB5BD</color>
+    <color name="neutral_line">#EDEDED</color>
+    <color name="neutral_off_white">#F7F7FC</color>
+    <color name="neutral_off_white">#F7F7FC</color>
+    <color name="neutral_white">#FFFFFF</color>
+    <color name="accent_danger">#E94242</color>
+    <color name="neutral_waring">#FDCF41</color>
+    <color name="neutral_success">#2CC069</color>
+    <color name="neutral_safe">#7BCBCF</color>
+
+</colors>
