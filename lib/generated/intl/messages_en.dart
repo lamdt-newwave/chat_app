@@ -20,18 +20,25 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
+  static String m0(phoneNumber) =>
+      "We have sent you an SMS with the code to ${phoneNumber}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "button_continue": MessageLookupByLibrary.simpleMessage("Continue"),
         "button_start_messaging":
             MessageLookupByLibrary.simpleMessage("Start Messaging"),
+        "text_enter_code": MessageLookupByLibrary.simpleMessage("Enter Code"),
         "text_enter_phone":
             MessageLookupByLibrary.simpleMessage("Enter Your Phone Number"),
         "text_on_boarding": MessageLookupByLibrary.simpleMessage(
             "Connect easily with your family and friends over countries"),
+        "text_phone_number":
+            MessageLookupByLibrary.simpleMessage("Phone Number"),
         "text_please_confirm_country": MessageLookupByLibrary.simpleMessage(
             "Please confirm your country code and enter your phone number"),
         "text_policy":
-            MessageLookupByLibrary.simpleMessage("Terms & Privacy Policy")
+            MessageLookupByLibrary.simpleMessage("Terms & Privacy Policy"),
+        "text_sent_sms": m0
       };
 }

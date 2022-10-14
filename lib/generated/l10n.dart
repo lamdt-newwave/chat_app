@@ -109,6 +109,36 @@ class I10n {
       args: [],
     );
   }
+
+  /// `Phone Number`
+  String get text_phone_number {
+    return Intl.message(
+      'Phone Number',
+      name: 'text_phone_number',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter Code`
+  String get text_enter_code {
+    return Intl.message(
+      'Enter Code',
+      name: 'text_enter_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `We have sent you an SMS with the code to {phoneNumber}`
+  String text_sent_sms(Object phoneNumber) {
+    return Intl.message(
+      'We have sent you an SMS with the code to $phoneNumber',
+      name: 'text_sent_sms',
+      desc: '',
+      args: [phoneNumber],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<I10n> {

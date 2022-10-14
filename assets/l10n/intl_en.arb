@@ -4,5 +4,8 @@
   "button_start_messaging": "Start Messaging",
   "text_enter_phone": "Enter Your Phone Number",
   "text_please_confirm_country": "Please confirm your country code and enter your phone number",
-  "button_continue" : "Continue"
+  "button_continue": "Continue",
+  "text_phone_number": "Phone Number",
+  "text_enter_code": "Enter Code",
+  "text_sent_sms": "We have sent you an SMS with the code to {phoneNumber}"
 }

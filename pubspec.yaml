@@ -40,6 +40,8 @@ dependencies:
   intl_utils: ^2.7.0
   intl: ^0.17.0
   cached_network_image: ^3.2.2
+  country_pickers: ^2.0.0
+  pin_code_fields: ^7.4.0
 
 
 dev_dependencies:

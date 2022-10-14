@@ -3,7 +3,7 @@ import 'package:chat_app/generated/common/colors.gen.dart';
 import 'package:chat_app/generated/l10n.dart';
 import 'package:chat_app/ui/pages/splash/splash_cubit.dart';
 import 'package:chat_app/ui/widgets/button/normal_button.dart';
-import 'package:chat_app/ui/widgets/common/wrapper.dart';
+import 'package:chat_app/ui/widgets/commons/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
