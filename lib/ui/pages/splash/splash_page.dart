@@ -6,6 +6,7 @@ import 'package:chat_app/ui/widgets/button/normal_button.dart';
 import 'package:chat_app/ui/widgets/commons/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -45,23 +46,23 @@ class _SplashChildPageState extends State<SplashChildPage> {
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
-              const SizedBox(
-                height: 100,
+              SizedBox(
+                height: 100.h,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: AppAssets.images.imgOnBoarding.image(
-                  height: 270,
+                  height: 270.h,
                   fit: BoxFit.cover,
                 ),
               ),
-              const SizedBox(
-                height: 40,
+              SizedBox(
+                height: 40.h,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Wrapper(
-                  height: 90,
+                  height: 90.h,
                   child: Text(
                     I10n.current.text_on_boarding,
                     textAlign: TextAlign.center,
@@ -69,18 +70,16 @@ class _SplashChildPageState extends State<SplashChildPage> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 120,
-              ),
+              const Spacer(),
               Wrapper(
-                height: 24,
+                height: 24.h,
                 child: Text(
                   I10n.current.text_policy,
                   style: theme.textTheme.bodyText1,
                 ),
               ),
-              const SizedBox(
-                height: 16,
+              SizedBox(
+                height: 16.h,
               ),
               NormalButton(
                 onPressed: _cubit.onGoSignUpWithPhonePage,
@@ -89,6 +88,9 @@ class _SplashChildPageState extends State<SplashChildPage> {
                   style: theme.textTheme.bodyText2
                       ?.copyWith(color: AppColors.neutralOffWhite),
                 ),
+              ),
+              const SizedBox(
+                height: 20,
               ),
             ],
           ),

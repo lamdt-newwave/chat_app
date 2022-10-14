@@ -1,69 +1,71 @@
 part of '../sign_up_with_phone_page.dart';
 
 extension BuildPhoneNumberPage on _SignUpWithPhoneChildPageState {
-  Scaffold _buildPhonePage(BuildContext context) {
+  Widget _buildPhonePage(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 14,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 16),
-              child: InkWell(
-                onTap: Get.back,
-                child: AppAssets.svgs.icChevronLeft.svg(
-                  height: 24,
-                  width: 24,
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 14.h,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: InkWell(
+                  onTap: Get.back,
+                  child: AppAssets.svgs.icChevronLeft.svg(
+                    height: 24.h,
+                    width: 24.h,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 100,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                children: [
-                  Wrapper(
-                    height: 30,
-                    child: Text(
-                      I10n.current.text_enter_phone,
-                      style: textTheme.headline2,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Wrapper(
-                    height: 48,
-                    child: Text(
-                      I10n.current.text_please_confirm_country,
-                      style: textTheme.bodyText2,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 48,
-                  ),
-                  _buildPhoneTextField(textTheme),
-                  const SizedBox(
-                    height: 80,
-                  ),
-                  NormalButton(
-                      onPressed: _cubit.onMoveToVerification,
-                      child: Text(
-                        I10n.current.button_continue,
-                        style: textTheme.subtitle2
-                            ?.copyWith(color: AppColors.neutralOffWhite),
-                      ))
-                ],
+              SizedBox(
+                height: 100.h,
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  children: [
+                    Wrapper(
+                      height: 30.h,
+                      child: Text(
+                        I10n.current.text_enter_phone,
+                        style: textTheme.headline2,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 8.h,
+                    ),
+                    Wrapper(
+                      height: 48.h,
+                      child: Text(
+                        I10n.current.text_please_confirm_country,
+                        style: textTheme.bodyText2,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 48.h,
+                    ),
+                    _buildPhoneTextField(textTheme),
+                    SizedBox(
+                      height: 80.h,
+                    ),
+                    NormalButton(
+                        onPressed: _cubit.onMoveToVerification,
+                        child: Text(
+                          I10n.current.button_continue,
+                          style: textTheme.subtitle2
+                              ?.copyWith(color: AppColors.neutralOffWhite),
+                        ))
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

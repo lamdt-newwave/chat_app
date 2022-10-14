@@ -8,41 +8,41 @@ extension BuildVerificationPage on _SignUpWithPhoneChildPageState {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(
-              height: 14,
+            SizedBox(
+              height: 14.h,
             ),
             Padding(
               padding: const EdgeInsets.only(left: 16),
               child: InkWell(
                 onTap: Get.back,
                 child: AppAssets.svgs.icChevronLeft.svg(
-                  height: 24,
-                  width: 24,
+                  height: 24.h,
+                  width: 24.h,
                 ),
               ),
             ),
-            const SizedBox(
-              height: 100,
+            SizedBox(
+              height: 100.h,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
                 children: [
                   Wrapper(
-                    height: 30,
+                    height: 30.h,
                     child: Text(
                       I10n.current.text_enter_code,
                       style: textTheme.headline2,
                     ),
                   ),
-                  const SizedBox(
-                    height: 8,
+                  SizedBox(
+                    height: 8.h,
                   ),
                   BlocBuilder<SignUpWithPhoneCubit, SignUpWithPhoneState>(
                     bloc: _cubit,
                     builder: (context, state) {
                       return SizedBox(
-                        width: 270,
+                        width: 270.h,
                         child: Text(
                           I10n.current.text_sent_sms(
                               "+${state.selectedCountry.phoneCode} ${state.phoneNumber}"),
@@ -52,8 +52,8 @@ extension BuildVerificationPage on _SignUpWithPhoneChildPageState {
                       );
                     },
                   ),
-                  const SizedBox(
-                    height: 48,
+                  SizedBox(
+                    height: 48.h,
                   ),
                   PinCodeTextField(
                     length: 6,
@@ -62,8 +62,8 @@ extension BuildVerificationPage on _SignUpWithPhoneChildPageState {
                     pinTheme: PinTheme(
                       shape: PinCodeFieldShape.box,
                       borderRadius: BorderRadius.circular(5),
-                      fieldHeight: 50,
-                      fieldWidth: 40,
+                      fieldHeight: 50.h,
+                      fieldWidth: 40.w,
                       activeFillColor: Colors.white,
                       inactiveFillColor: AppColors.neutralWhite,
                     ),
@@ -72,18 +72,18 @@ extension BuildVerificationPage on _SignUpWithPhoneChildPageState {
                     enableActiveFill: true,
                     errorAnimationController: errorController,
                     controller: TextEditingController(),
-                    onCompleted: (v) {},
+                    onCompleted: _cubit.onSignIn,
                     onChanged: (value) {},
                     beforeTextPaste: (text) {
                       return true;
                     },
                     appContext: context,
                   ),
-                  const SizedBox(
-                    height: 80,
+                  SizedBox(
+                    height: 80.h,
                   ),
                   SizedBox(
-                    height: 52,
+                    height: 52.h,
                     child: TextButton(
                       onPressed: _cubit.onResendCode,
                       child: Text(
