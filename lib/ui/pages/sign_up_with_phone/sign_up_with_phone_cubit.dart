@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:chat_app/repositories/auth_repository.dart';
+import 'package:chat_app/repositories/user_repository.dart';
 import 'package:chat_app/routes/app_routes.dart';
 import 'package:country_pickers/country.dart';
 import 'package:equatable/equatable.dart';
@@ -8,7 +10,13 @@ import 'package:get/get.dart';
 part 'sign_up_with_phone_state.dart';
 
 class SignUpWithPhoneCubit extends Cubit<SignUpWithPhoneState> {
-  SignUpWithPhoneCubit() : super(SignUpWithPhoneState());
+  final AuthRepository authRepository;
+  final UserRepository userRepository;
+
+  SignUpWithPhoneCubit({
+    required this.authRepository,
+    required this.userRepository,
+  }) : super(SignUpWithPhoneState());
 
   void onSelectedCountryChanged(Country newCountry) {
     emit(state.copyWith(selectedCountry: newCountry));
@@ -48,7 +56,19 @@ class SignUpWithPhoneCubit extends Cubit<SignUpWithPhoneState> {
           verificationId: state.verificationId, smsCode: code);
       final result =
           await FirebaseAuth.instance.signInWithCredential(credential);
-      Get.toNamed(AppRoutes.home);
+      if (await userRepository.isExistedUser(uId: result.user?.uid ?? "")) {
+        authRepository.saveUid(result.user?.uid ?? "");
+        Get.toNamed(AppRoutes.home);
+      } else {
+        Get.toNamed(
+          AppRoutes.profileAccount,
+          parameters: {
+            "uId": result.user!.uid,
+            "phoneNumber": state.phoneNumber,
+            "phoneCode": state.selectedCountry.phoneCode,
+          },
+        );
+      }
     } on FirebaseAuthException catch (e) {
       print('Failed with error code: ${e.code}');
       print(e.message);

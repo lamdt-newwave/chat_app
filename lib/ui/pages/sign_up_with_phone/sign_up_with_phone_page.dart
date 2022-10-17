@@ -1,3 +1,5 @@
+import 'package:chat_app/repositories/auth_repository.dart';
+import 'package:chat_app/repositories/user_repository.dart';
 import 'package:chat_app/ui/pages/sign_up_with_phone/sign_up_with_phone_cubit.dart';
 import 'package:chat_app/ui/pages/sign_up_with_phone/widgets/enter_phone_page.dart';
 import 'package:chat_app/ui/pages/sign_up_with_phone/widgets/verification_page.dart';
@@ -10,7 +12,11 @@ class SignUpWithPhonePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => SignUpWithPhoneCubit(),
+        create: (context) {
+          return SignUpWithPhoneCubit(
+              userRepository: RepositoryProvider.of<UserRepository>(context),
+              authRepository: RepositoryProvider.of<AuthRepository>(context));
+        },
         child: const SignUpWithPhoneChildPage());
   }
 }

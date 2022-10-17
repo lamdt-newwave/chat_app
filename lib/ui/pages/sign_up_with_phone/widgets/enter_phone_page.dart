@@ -25,28 +25,25 @@ class EnterPhonePage extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 14.h,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16),
-                child: InkWell(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 14.h,
+                ),
+                InkWell(
                   onTap: Get.back,
                   child: AppAssets.svgs.icChevronLeft.svg(
                     height: 24.h,
                     width: 24.h,
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 100.h,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
+                SizedBox(
+                  height: 100.h,
+                ),
+                Column(
                   children: [
                     Wrapper(
                       height: 30.h,
@@ -83,8 +80,8 @@ class EnterPhonePage extends StatelessWidget {
                     )
                   ],
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
