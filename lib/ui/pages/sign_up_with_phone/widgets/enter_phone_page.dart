@@ -1,7 +1,26 @@
-part of '../sign_up_with_phone_page.dart';
+import 'package:chat_app/generated/common/assets.gen.dart';
+import 'package:chat_app/generated/common/colors.gen.dart';
+import 'package:chat_app/generated/l10n.dart';
+import 'package:chat_app/ui/pages/sign_up_with_phone/sign_up_with_phone_cubit.dart';
+import 'package:chat_app/ui/widgets/button/normal_button.dart';
+import 'package:chat_app/ui/widgets/commons/app_dialogs.dart';
+import 'package:chat_app/ui/widgets/commons/wrapper.dart';
+import 'package:country_pickers/country_pickers.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
-extension BuildPhoneNumberPage on _SignUpWithPhoneChildPageState {
-  Widget _buildPhonePage(BuildContext context) {
+class EnterPhonePage extends StatelessWidget {
+  final SignUpWithPhoneCubit cubit;
+
+  const EnterPhonePage({
+    Key? key,
+    required this.cubit,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       body: SingleChildScrollView(
@@ -55,12 +74,13 @@ extension BuildPhoneNumberPage on _SignUpWithPhoneChildPageState {
                       height: 80.h,
                     ),
                     NormalButton(
-                        onPressed: _cubit.onMoveToVerification,
-                        child: Text(
-                          I10n.current.button_continue,
-                          style: textTheme.subtitle2
-                              ?.copyWith(color: AppColors.neutralOffWhite),
-                        ))
+                      onPressed: cubit.onMoveToVerification,
+                      child: Text(
+                        I10n.current.button_continue,
+                        style: textTheme.subtitle2
+                            ?.copyWith(color: AppColors.neutralOffWhite),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -77,37 +97,37 @@ extension BuildPhoneNumberPage on _SignUpWithPhoneChildPageState {
       children: [
         InkWell(
           onTap: () => AppDialogs.showCountryPicker(
-              onValuePicked: _cubit.onSelectedCountryChanged),
+              onValuePicked: cubit.onSelectedCountryChanged),
           child: Container(
-            padding: const EdgeInsets.all(6),
+            padding: EdgeInsets.all(6.r),
             decoration: BoxDecoration(
               color: AppColors.neutralOffWhite,
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(4.r),
             ),
             child: BlocBuilder<SignUpWithPhoneCubit, SignUpWithPhoneState>(
-              bloc: _cubit,
+              bloc: cubit,
               builder: (context, state) {
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(4.r),
                       child: Image.asset(
                         CountryPickerUtils.getFlagImageAssetPath(
                             state.selectedCountry.isoCode),
-                        height: 24.0,
-                        width: 24.0,
+                        height: 24.r,
+                        width: 24.r,
                         fit: BoxFit.cover,
                         package: "country_pickers",
                       ),
                     ),
-                    const SizedBox(
-                      width: 8,
+                    SizedBox(
+                      width: 8.w,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 2),
+                      padding: EdgeInsets.only(top: 2.h),
                       child: SizedBox(
-                        height: 24,
+                        height: 24.h,
                         child: Text(
                           "+${state.selectedCountry.phoneCode}",
                           style: textTheme.bodyText1
@@ -129,10 +149,10 @@ extension BuildPhoneNumberPage on _SignUpWithPhoneChildPageState {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 36,
+                height: 36.h,
                 child: TextFormField(
-                  onChanged: _cubit.onPhoneNumberChanged,
-                  cursorHeight: 24,
+                  onChanged: cubit.onPhoneNumberChanged,
+                  cursorHeight: 24.h,
                   cursorColor: AppColors.neutralDisabled,
                   maxLines: 1,
                   style: textTheme.bodyText1
@@ -149,13 +169,13 @@ extension BuildPhoneNumberPage on _SignUpWithPhoneChildPageState {
                 ),
               ),
               BlocBuilder<SignUpWithPhoneCubit, SignUpWithPhoneState>(
-                bloc: _cubit,
+                bloc: cubit,
                 builder: (context, state) {
                   return SizedBox(
-                    height: 24,
+                    height: 24.h,
                     child: state.errorTextPhoneNumber.isNotEmpty
                         ? Padding(
-                            padding: const EdgeInsets.only(left: 10),
+                            padding: EdgeInsets.only(left: 10.w),
                             child: Text(
                               state.errorTextPhoneNumber,
                               style: Theme.of(context)

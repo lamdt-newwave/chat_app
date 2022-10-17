@@ -1,9 +1,28 @@
-part of '../sign_up_with_phone_page.dart';
+import 'dart:async';
 
-extension BuildVerificationPage on _SignUpWithPhoneChildPageState {
-  Widget _buildVerificationPage(BuildContext context) {
+import 'package:chat_app/generated/common/assets.gen.dart';
+import 'package:chat_app/generated/common/colors.gen.dart';
+import 'package:chat_app/generated/l10n.dart';
+import 'package:chat_app/ui/pages/sign_up_with_phone/sign_up_with_phone_cubit.dart';
+import 'package:chat_app/ui/widgets/commons/wrapper.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
+
+class VerificationPage extends StatelessWidget {
+  final SignUpWithPhoneCubit cubit;
+  final StreamController<ErrorAnimationType> errorController =
+      StreamController<ErrorAnimationType>();
+
+  VerificationPage({Key? key, required this.cubit}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
+      backgroundColor: AppColors.neutralWhite,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,7 +58,7 @@ extension BuildVerificationPage on _SignUpWithPhoneChildPageState {
                     height: 8.h,
                   ),
                   BlocBuilder<SignUpWithPhoneCubit, SignUpWithPhoneState>(
-                    bloc: _cubit,
+                    bloc: cubit,
                     builder: (context, state) {
                       return SizedBox(
                         width: 270.h,
@@ -72,7 +91,7 @@ extension BuildVerificationPage on _SignUpWithPhoneChildPageState {
                     enableActiveFill: true,
                     errorAnimationController: errorController,
                     controller: TextEditingController(),
-                    onCompleted: _cubit.onSignIn,
+                    onCompleted: cubit.onSignIn,
                     onChanged: (value) {},
                     beforeTextPaste: (text) {
                       return true;
@@ -85,7 +104,7 @@ extension BuildVerificationPage on _SignUpWithPhoneChildPageState {
                   SizedBox(
                     height: 52.h,
                     child: TextButton(
-                      onPressed: _cubit.onResendCode,
+                      onPressed: cubit.onResendCode,
                       child: Text(
                         "Resend Code",
                         style: textTheme.subtitle2

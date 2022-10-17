@@ -19,26 +19,39 @@ class SignUpWithPhoneCubit extends Cubit<SignUpWithPhoneState> {
   }
 
   Future<void> onMoveToVerification() async {
-    try {
-      FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: "+${state.selectedCountry.phoneCode} ${state.phoneNumber}",
-        verificationCompleted: (PhoneAuthCredential credential) {},
-        verificationFailed: (FirebaseAuthException e) {},
-        codeSent: (String verificationId, int? resendToken) {
-          emit(state.copyWith(
-              isVerifying: true, verificationId: verificationId));
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {},
-      );
-    } catch (e) {}
+    FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: "+${state.selectedCountry.phoneCode} ${state.phoneNumber}",
+      verificationCompleted: (PhoneAuthCredential credential) {},
+      verificationFailed: (FirebaseAuthException e) {},
+      codeSent: (String verificationId, int? resendToken) {
+        emit(state.copyWith(isVerifying: true, verificationId: verificationId));
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
   }
 
-  void onResendCode() {}
+  void onResendCode() {
+    FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: "+${state.selectedCountry.phoneCode} ${state.phoneNumber}",
+      verificationCompleted: (PhoneAuthCredential credential) {},
+      verificationFailed: (FirebaseAuthException e) {},
+      codeSent: (String verificationId, int? resendToken) {
+        emit(state.copyWith(verificationId: verificationId));
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
+  }
 
   Future<void> onSignIn(String code) async {
-    PhoneAuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: state.verificationId, smsCode: code);
-    await FirebaseAuth.instance.signInWithCredential(credential);
-    Get.toNamed(AppRoutes.home);
+    try {
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+          verificationId: state.verificationId, smsCode: code);
+      final result =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      Get.toNamed(AppRoutes.home);
+    } on FirebaseAuthException catch (e) {
+      print('Failed with error code: ${e.code}');
+      print(e.message);
+    }
   }
 }
