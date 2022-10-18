@@ -4,26 +4,29 @@ class ProfileAccountState extends Equatable {
   const ProfileAccountState({
     this.firstName = "",
     this.lastName = "",
-    this.avatarPath = "",
+    this.avatarUrl = "",
   });
 
   final String firstName;
   final String lastName;
-  final String avatarPath;
+  final String avatarUrl;
+
+  bool get isEnableSave =>
+      firstName.isNotEmpty && lastName.isNotEmpty && avatarUrl.isNotEmpty;
 
   @override
   List<Object> get props => [
         firstName,
         lastName,
-        avatarPath,
+        avatarUrl,
       ];
 
   ProfileAccountState copyWith(
-      {String? firstName, String? lastName, String? avatarPath}) {
+      {String? firstName, String? lastName, String? avatarUrl}) {
     return ProfileAccountState(
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
-      avatarPath: avatarPath ?? this.avatarPath,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
     );
   }
 }

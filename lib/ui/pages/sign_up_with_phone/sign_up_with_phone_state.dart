@@ -5,9 +5,11 @@ class SignUpWithPhoneState extends Equatable {
   final String phoneNumber;
   final bool isVerifying;
   final String verificationId;
+  final LoadStatus loadStatus;
 
   SignUpWithPhoneState(
-      {this.isVerifying = false,
+      {this.loadStatus = LoadStatus.initial,
+      this.isVerifying = false,
       this.phoneNumber = "/",
       this.verificationId = "",
       Country? selectedCountry})
@@ -35,15 +37,16 @@ class SignUpWithPhoneState extends Equatable {
 
   @override
   List<Object> get props =>
-      [selectedCountry, phoneNumber, isVerifying, verificationId];
+      [selectedCountry, phoneNumber, isVerifying, verificationId, loadStatus];
 
-  SignUpWithPhoneState copyWith({
-    Country? selectedCountry,
-    String? phoneNumber,
-    bool? isVerifying,
-    String? verificationId,
-  }) {
+  SignUpWithPhoneState copyWith(
+      {Country? selectedCountry,
+      String? phoneNumber,
+      bool? isVerifying,
+      String? verificationId,
+      LoadStatus? loadStatus}) {
     return SignUpWithPhoneState(
+        loadStatus: loadStatus ?? this.loadStatus,
         verificationId: verificationId ?? this.verificationId,
         isVerifying: isVerifying ?? this.isVerifying,
         selectedCountry: selectedCountry ?? this.selectedCountry,

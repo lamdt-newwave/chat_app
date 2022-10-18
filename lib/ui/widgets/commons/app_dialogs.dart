@@ -1,16 +1,19 @@
+import 'package:chat_app/generated/common/assets.gen.dart';
+import 'package:chat_app/generated/common/colors.gen.dart';
 import 'package:country_pickers/country.dart';
 import 'package:country_pickers/country_pickers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AppDialogs {
-  static void showCountryPicker({required Function(Country) onValuePicked}) {
-    Get.dialog(CountryPickerDialog(
-        titlePadding: EdgeInsets.all(8.0),
+  static Future<void> showCountryPicker(
+      {required Function(Country) onValuePicked}) {
+    return Get.dialog(CountryPickerDialog(
+        titlePadding: const EdgeInsets.all(8.0),
         searchCursorColor: Colors.pinkAccent,
-        searchInputDecoration: InputDecoration(hintText: 'Search...'),
+        searchInputDecoration: const InputDecoration(hintText: 'Search...'),
         isSearchable: true,
-        title: Text('Select your phone code'),
+        title: const Text('Select your phone code'),
         onValuePicked: onValuePicked,
         priorityList: [
           CountryPickerUtils.getCountryByIsoCode('VN'),
@@ -22,10 +25,43 @@ class AppDialogs {
   static Widget _buildDialogItem(Country country) => Row(
         children: <Widget>[
           CountryPickerUtils.getDefaultFlagImage(country),
-          SizedBox(width: 8.0),
+          const SizedBox(width: 8.0),
           Text("+${country.phoneCode}"),
-          SizedBox(width: 8.0),
+          const SizedBox(width: 8.0),
           Flexible(child: Text(country.name))
         ],
       );
+
+  static Future<void> showLoadingDialog() {
+    return Get.dialog(
+      Center(
+        child: Container(
+          width: Get.size.width * 0.8,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: AppColors.neutralOffWhite,
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: Get.size.height * 0.03),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AppAssets.lotties.lottieAppLoading.lottie(
+                  height: 160,
+                  width: 160,
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Text(
+                  "Wait a few seconds!",
+                  style: Get.textTheme.subtitle2,
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }

@@ -2,7 +2,10 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:chat_app/models/entities/user_entity.dart';
+import 'package:chat_app/repositories/auth_repository.dart';
 import 'package:chat_app/repositories/user_repository.dart';
+import 'package:chat_app/routes/app_routes.dart';
+import 'package:chat_app/ui/widgets/commons/app_dialogs.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -13,9 +16,12 @@ part 'profile_account_state.dart';
 
 class ProfileAccountCubit extends Cubit<ProfileAccountState> {
   final UserRepository userRepository;
+  final AuthRepository authRepository;
 
-  ProfileAccountCubit({required this.userRepository})
-      : super(const ProfileAccountState());
+  ProfileAccountCubit({
+    required this.userRepository,
+    required this.authRepository,
+  }) : super(const ProfileAccountState());
 
   void onFirstNameChanged(String newValue) {
     emit(state.copyWith(firstName: newValue));
@@ -26,15 +32,9 @@ class ProfileAccountCubit extends Cubit<ProfileAccountState> {
   }
 
   Future<void> onSave() async {
-    if (state.firstName.isNotEmpty &&
-        state.lastName.isNotEmpty &&
-        state.avatarPath.isNotEmpty) {
-      final storageRef = FirebaseStorage.instance.ref();
-      File avatar = File(state.avatarPath);
-      final imageRef = storageRef.child("images/${avatar.path.split("").last}");
+    if (state.isEnableSave) {
+      AppDialogs.showLoadingDialog();
       try {
-        await imageRef.putFile(avatar);
-        final avatarUrl = await imageRef.getDownloadURL();
         final para = Get.parameters;
         final String uId = para["uId"] ?? "";
         final String phoneCode = para["phoneCode"] ?? "";
@@ -44,15 +44,18 @@ class ProfileAccountCubit extends Cubit<ProfileAccountState> {
           uId: uId,
           lastName: state.firstName,
           firstName: state.lastName,
-          avatarUrl: avatarUrl,
+          avatarUrl: state.avatarUrl,
           phoneNumber: phoneNumber,
           createdTime: Timestamp.fromDate(DateTime.now()),
           lastTime: Timestamp.fromDate(DateTime.now()),
         );
-        userRepository.addUser(userEntity: userEntity);
-        print("Done");
+        await userRepository.addUser(userEntity: userEntity);
+        authRepository.saveUid(uId);
+        Get.back();
+        Get.toNamed(AppRoutes.home);
       } on FirebaseException catch (e) {
         print(e.toString());
+        Get.back();
       }
     }
   }
@@ -61,7 +64,13 @@ class ProfileAccountCubit extends Cubit<ProfileAccountState> {
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
-      emit(state.copyWith(avatarPath: image.path));
+      final storageRef = FirebaseStorage.instance.ref();
+      File avatar = File(image.path);
+      final imageRef = storageRef.child("images/${image.name}");
+      await imageRef.putFile(avatar).then((taskSnapShot) async {
+        final avatarUrl = await imageRef.getDownloadURL();
+        emit(state.copyWith(avatarUrl: avatarUrl));
+      });
     }
   }
 }
