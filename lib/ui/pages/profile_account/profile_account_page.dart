@@ -153,7 +153,7 @@ class _ProfileAccountChildPageState extends State<ProfileAccountChildPage> {
                 height: 12.h,
               ),
               NormalTextField(
-                hintText: "Last Name (Optional)",
+                hintText: "Last Name (Required)",
                 onChanged: _cubit.onLastNameChanged,
               ),
               SizedBox(

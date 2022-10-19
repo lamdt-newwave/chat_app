@@ -26,6 +26,10 @@ class $AssetsImagesGen {
 class $AssetsLottiesGen {
   const $AssetsLottiesGen();
 
+  /// File path: assets/lotties/lottie_app_failure.json
+  LottieGenImage get lottieAppFailure =>
+      const LottieGenImage('assets/lotties/lottie_app_failure.json');
+
   /// File path: assets/lotties/lottie_app_loading.json
   LottieGenImage get lottieAppLoading =>
       const LottieGenImage('assets/lotties/lottie_app_loading.json');
@@ -35,7 +39,8 @@ class $AssetsLottiesGen {
       const LottieGenImage('assets/lotties/lottie_loading.json');
 
   /// List of all assets
-  List<LottieGenImage> get values => [lottieAppLoading, lottieLoading];
+  List<LottieGenImage> get values =>
+      [lottieAppFailure, lottieAppLoading, lottieLoading];
 }
 
 class $AssetsSvgsGen {

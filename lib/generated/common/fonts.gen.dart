@@ -10,6 +10,9 @@
 class FontFamily {
   FontFamily._();
 
+  /// Font family: Lato
+  static const String lato = 'Lato';
+
   /// Font family: Mulish
   static const String mulish = 'Mulish';
 }

@@ -13,11 +13,11 @@ class UserEntity {
 
   UserEntity({
     required this.phoneCode,
-    required this.uId,
+    this.uId = "",
     required this.lastName,
     required this.firstName,
     required this.avatarUrl,
-    this.status = 0,
+    required this.status,
     required this.phoneNumber,
     required this.createdTime,
     required this.lastTime,
@@ -48,5 +48,47 @@ class UserEntity {
       'lastTime': lastTime,
       "phoneCode": phoneCode,
     };
+  }
+
+  static UserEntity fromJsonWithoutUid(Map<String, dynamic> json) {
+    return UserEntity(
+      phoneCode: json["phoneCode"],
+      lastName: json["lastName"],
+      firstName: json["firstName"],
+      avatarUrl: json["avatarUrl"],
+      phoneNumber: json["phoneNumber"],
+      createdTime: json["createdTime"],
+      status: json["status"],
+      lastTime: json["lastTime"],
+    );
+  }
+
+  UserEntity copyWith({
+    String? uId,
+    String? lastName,
+    String? firstName,
+    String? avatarUrl,
+    int? status,
+    String? phoneNumber,
+    Timestamp? createdTime,
+    Timestamp? lastTime,
+    String? phoneCode,
+  }) {
+    return UserEntity(
+      uId: uId ?? this.uId,
+      status: status ?? this.status,
+      phoneCode: phoneCode ?? this.phoneCode,
+      lastName: lastName ?? this.lastName,
+      firstName: firstName ?? this.firstName,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      createdTime: createdTime ?? this.createdTime,
+      lastTime: lastTime ?? this.lastTime,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'UserEntity{uId: $uId, lastName: $lastName, firstName: $firstName, avatarUrl: $avatarUrl, status: $status, phoneNumber: $phoneNumber, createdTime: $createdTime, lastTime: $lastTime, phoneCode: $phoneCode}';
   }
 }

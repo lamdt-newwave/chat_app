@@ -1,7 +1,9 @@
+import 'package:chat_app/blocs/app/app_cubit.dart';
 import 'package:chat_app/generated/common/assets.gen.dart';
 import 'package:chat_app/generated/common/colors.gen.dart';
 import 'package:chat_app/generated/l10n.dart';
 import 'package:chat_app/repositories/auth_repository.dart';
+import 'package:chat_app/repositories/user_repository.dart';
 import 'package:chat_app/ui/pages/splash/splash_cubit.dart';
 import 'package:chat_app/ui/widgets/button/normal_button.dart';
 import 'package:chat_app/ui/widgets/commons/wrapper.dart';
@@ -16,7 +18,10 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        return SplashCubit(authRepository: RepositoryProvider.of<AuthRepository>(context));
+        return SplashCubit(
+            userRepository: RepositoryProvider.of<UserRepository>(context),
+            authRepository: RepositoryProvider.of<AuthRepository>(context),
+            appCubit: context.read<AppCubit>());
       },
       child: const SplashChildPage(),
     );

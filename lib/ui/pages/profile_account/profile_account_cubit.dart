@@ -40,6 +40,7 @@ class ProfileAccountCubit extends Cubit<ProfileAccountState> {
         final String phoneCode = para["phoneCode"] ?? "";
         final String phoneNumber = para["phoneNumber"] ?? "";
         UserEntity userEntity = UserEntity(
+          status: 1,
           phoneCode: phoneCode,
           uId: uId,
           lastName: state.firstName,
@@ -53,8 +54,7 @@ class ProfileAccountCubit extends Cubit<ProfileAccountState> {
         authRepository.saveUid(uId);
         Get.back();
         Get.toNamed(AppRoutes.home);
-      } on FirebaseException catch (e) {
-        print(e.toString());
+      } on FirebaseException {
         Get.back();
       }
     }

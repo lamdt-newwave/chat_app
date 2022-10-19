@@ -79,6 +79,13 @@ flutter:
         - asset: assets/fonts/Mulish/Mulish-Bold.ttf
           weight: 700
 
+
+    - family: Lato
+      fonts:
+        - asset: assets/fonts/Lato/Lato-Regular.ttf
+        - asset: assets/fonts/Lato/Lato-Bold.ttf
+          weight: 700
+
 # Config flutter gen
 
 flutter_gen:
