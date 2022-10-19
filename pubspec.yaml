@@ -49,6 +49,7 @@ dependencies:
   flutter_screenutil: ^5.5.4
   image_picker: ^0.8.6
   firebase_storage: ^10.3.11
+  awesome_snackbar_content: ^0.0.8
 
 dev_dependencies:
   flutter_test:

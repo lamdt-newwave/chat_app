@@ -64,4 +64,39 @@ class AppDialogs {
       ),
     );
   }
+
+
+
+  static Future<void> showErrorDialog() {
+    return Get.dialog(
+      Center(
+        child: Container(
+          width: Get.size.width * 0.8,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: AppColors.neutralOffWhite,
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: Get.size.height * 0.03),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AppAssets.lotties.lottieAppLoading.lottie(
+                  height: 160,
+                  width: 160,
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Text(
+                  "Wait a few seconds!",
+                  style: Get.textTheme.subtitle2,
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }

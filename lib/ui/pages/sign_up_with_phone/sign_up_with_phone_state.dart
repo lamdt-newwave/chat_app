@@ -29,11 +29,13 @@ class SignUpWithPhoneState extends Equatable {
       if (phoneNumber == "/") {
         return "";
       }
-      return GetUtils.isNumericOnly(phoneNumber)
+      return GetUtils.isPhoneNumber(phoneNumber)
           ? ""
           : "Phone number is invalid!";
     }
   }
+
+  bool get isCorrectPhoneNumber => errorTextPhoneNumber.isEmpty;
 
   @override
   List<Object> get props =>

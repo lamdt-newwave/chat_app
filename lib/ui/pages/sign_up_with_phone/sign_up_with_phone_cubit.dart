@@ -4,6 +4,7 @@ import 'package:chat_app/repositories/auth_repository.dart';
 import 'package:chat_app/repositories/user_repository.dart';
 import 'package:chat_app/routes/app_routes.dart';
 import 'package:chat_app/ui/widgets/commons/app_dialogs.dart';
+import 'package:chat_app/ui/widgets/commons/app_snackbars.dart';
 import 'package:country_pickers/country.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,22 +30,31 @@ class SignUpWithPhoneCubit extends Cubit<SignUpWithPhoneState> {
   }
 
   Future<void> onMoveToVerification() async {
-    AppDialogs.showLoadingDialog();
-    FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: "+${state.selectedCountry.phoneCode} ${state.phoneNumber}",
-      verificationCompleted: (PhoneAuthCredential credential) {},
-      verificationFailed: (FirebaseAuthException e) {},
-      codeSent: (String verificationId, int? resendToken) {
-        Get.back();
-        emit(
-          state.copyWith(
-            isVerifying: true,
-            verificationId: verificationId,
-          ),
-        );
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {},
-    );
+    if (state.isCorrectPhoneNumber) {
+      AppDialogs.showLoadingDialog();
+      FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: "+${state.selectedCountry.phoneCode} ${state.phoneNumber}",
+        verificationCompleted: (PhoneAuthCredential credential) {},
+        verificationFailed: (FirebaseAuthException e) {
+          if (e.code == "invalid-phone-number") {
+            AppSnackbars.showErrorSnackbar(
+                title: "Invalid Phone Number",
+                message: "Please check your phone number and try again.");
+          }
+          Get.back();
+        },
+        codeSent: (String verificationId, int? resendToken) {
+          Get.back();
+          emit(
+            state.copyWith(
+              isVerifying: true,
+              verificationId: verificationId,
+            ),
+          );
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {},
+      );
+    }
   }
 
   void onResendCode() {
@@ -79,8 +89,11 @@ class SignUpWithPhoneCubit extends Cubit<SignUpWithPhoneState> {
         );
       }
     } on FirebaseAuthException catch (e) {
-      print('Failed with error code: ${e.code}');
-      print(e.message);
+      if (e.code == "invalid-verification-code") {
+        AppSnackbars.showErrorSnackbar(
+            title: "Invalid Verification Code",
+            message: "The OTP you've entered is incorrect. Please try again.");
+      }
     }
   }
 }
