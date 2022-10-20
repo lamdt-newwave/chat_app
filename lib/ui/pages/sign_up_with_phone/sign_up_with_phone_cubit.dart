@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:chat_app/blocs/app/app_cubit.dart';
 import 'package:chat_app/models/enums/load_status.dart';
 import 'package:chat_app/repositories/auth_repository.dart';
 import 'package:chat_app/repositories/user_repository.dart';
@@ -15,8 +16,10 @@ part 'sign_up_with_phone_state.dart';
 class SignUpWithPhoneCubit extends Cubit<SignUpWithPhoneState> {
   final AuthRepository authRepository;
   final UserRepository userRepository;
+  final AppCubit appCubit;
 
   SignUpWithPhoneCubit({
+    required this.appCubit,
     required this.authRepository,
     required this.userRepository,
   }) : super(SignUpWithPhoneState());
@@ -77,6 +80,9 @@ class SignUpWithPhoneCubit extends Cubit<SignUpWithPhoneState> {
           await FirebaseAuth.instance.signInWithCredential(credential);
       if (await userRepository.isExistedUser(uId: result.user?.uid ?? "")) {
         authRepository.saveUid(result.user?.uid ?? "");
+        final user = await userRepository.getUserById(authRepository.getUid());
+        appCubit.updateUser(user);
+        await userRepository.updateUser(user.copyWith(status: 1));
         Get.toNamed(AppRoutes.home);
       } else {
         Get.toNamed(

@@ -45,7 +45,6 @@ class UserRepositoryImpl extends UserRepository {
     final usersDoc = await FirebaseFirestore.instance
         .collection(AppConstants.usersKey)
         .get();
-
     return usersDoc.docs.map((e) {
       final data = e.data();
       UserEntity userEntity = UserEntity.fromJsonWithoutUid(data);

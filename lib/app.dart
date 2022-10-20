@@ -20,8 +20,10 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider<AuthRepository>(create: (context) => AuthRepositoryImpl()),
-        RepositoryProvider<UserRepository>(create: (context) => UserRepositoryImpl()),
+        RepositoryProvider<AuthRepository>(
+            create: (context) => AuthRepositoryImpl()),
+        RepositoryProvider<UserRepository>(
+            create: (context) => UserRepositoryImpl()),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -29,7 +31,9 @@ class App extends StatelessWidget {
             create: (context) => AppSettingCubit(),
           ),
           BlocProvider(
-            create: (context) => AppCubit(),
+            create: (context) => AppCubit(
+                userRepository: RepositoryProvider.of<UserRepository>(context),
+                authRepository: RepositoryProvider.of<AuthRepository>(context)),
           ),
         ],
         child: BlocBuilder<AppSettingCubit, AppSettingState>(

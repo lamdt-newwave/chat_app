@@ -1,3 +1,4 @@
+import 'package:chat_app/blocs/app/app_cubit.dart';
 import 'package:chat_app/repositories/auth_repository.dart';
 import 'package:chat_app/repositories/user_repository.dart';
 import 'package:chat_app/ui/pages/sign_up_with_phone/sign_up_with_phone_cubit.dart';
@@ -14,6 +15,7 @@ class SignUpWithPhonePage extends StatelessWidget {
     return BlocProvider(
         create: (context) {
           return SignUpWithPhoneCubit(
+              appCubit: context.read<AppCubit>(),
               userRepository: RepositoryProvider.of<UserRepository>(context),
               authRepository: RepositoryProvider.of<AuthRepository>(context));
         },

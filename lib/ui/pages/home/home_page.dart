@@ -48,10 +48,22 @@ class _HomeChildPageState extends State<HomeChildPage> {
             builder: (context, state) {
               return IndexedStack(
                 index: state.selectedIndex,
-                children: const [
-                  ContactsPage(),
-                  ChatsPage(),
-                  MorePage(),
+                children: [
+                  AnimatedOpacity(
+                    opacity: state.selectedIndex == 0 ? 1 : 0,
+                    duration: const Duration(milliseconds: 500),
+                    child: const ContactsPage(),
+                  ),
+                  AnimatedOpacity(
+                    opacity: state.selectedIndex == 1 ? 1 : 0,
+                    duration: const Duration(milliseconds: 500),
+                    child: const ChatsPage(),
+                  ),
+                  AnimatedOpacity(
+                    opacity: state.selectedIndex == 2 ? 1 : 0,
+                    duration: const Duration(milliseconds: 500),
+                    child: const MorePage(),
+                  )
                 ],
               );
             },

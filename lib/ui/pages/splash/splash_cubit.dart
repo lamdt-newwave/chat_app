@@ -24,7 +24,7 @@ class SplashCubit extends Cubit<SplashState> {
   }
 
   Future<void> checkSignIn() async {
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 300));
     if (authRepository.isSignedIn()) {
       final user = await userRepository.getUserById(authRepository.getUid());
       appCubit.updateUser(user);

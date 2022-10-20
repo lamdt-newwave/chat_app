@@ -1,6 +1,9 @@
+import 'package:chat_app/blocs/app/app_cubit.dart';
+import 'package:chat_app/routes/app_routes.dart';
 import 'package:chat_app/ui/pages/more/more_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 
 class MorePage extends StatelessWidget {
   const MorePage({Key? key}) : super(key: key);
@@ -27,7 +30,18 @@ class _MoreChildPageState extends State<MoreChildPage> {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: Text("More"),
+          child: Column(
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  context.read<AppCubit>().signOut();
+                  Get.offNamed(AppRoutes.signUpWithPhone);
+                },
+                child: Text("Sign Out"),
+              ),
+              Text("More"),
+            ],
+          ),
         ),
       ),
     );

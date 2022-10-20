@@ -79,9 +79,9 @@ class ContactsItem extends StatelessWidget {
                         child: Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: offLineWithinDay
-                                ? AppColors.branchDefault
-                                : AppColors.neutralSuccess,
+                            color: isOnline
+                                ? AppColors.neutralSuccess
+                                : AppColors.branchDefault,
                           ),
                         ),
                       ),
