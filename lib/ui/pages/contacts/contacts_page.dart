@@ -1,3 +1,4 @@
+import 'package:chat_app/blocs/app/app_cubit.dart';
 import 'package:chat_app/generated/common/assets.gen.dart';
 import 'package:chat_app/generated/common/colors.gen.dart';
 import 'package:chat_app/models/enums/load_status.dart';
@@ -18,7 +19,8 @@ class ContactsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ContactsCubit(
-          userRepository: RepositoryProvider.of<UserRepository>(context)),
+          userRepository: RepositoryProvider.of<UserRepository>(context),
+          appCubit: context.read<AppCubit>()),
       child: const ContactsChildPage(),
     );
   }

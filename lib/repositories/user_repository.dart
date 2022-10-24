@@ -20,7 +20,7 @@ abstract class UserRepository {
     String? phoneCode,
   });
 
-  Future<List<UserEntity>> fetchUsers();
+  Future<List<UserEntity>> fetchUsersWithoutUid(String uId);
 
   Future<UserEntity> getUserById(String uId);
 }
@@ -41,15 +41,19 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<List<UserEntity>> fetchUsers() async {
-    final usersDoc = await FirebaseFirestore.instance
+  Future<List<UserEntity>> fetchUsersWithoutUid(String uId) async {
+    final usersCollection = await FirebaseFirestore.instance
         .collection(AppConstants.usersKey)
         .get();
-    return usersDoc.docs.map((e) {
-      final data = e.data();
-      UserEntity userEntity = UserEntity.fromJsonWithoutUid(data);
-      return userEntity.copyWith(uId: e.id);
-    }).toList();
+    return usersCollection.docs
+        .map((e) {
+          final data = e.data();
+          UserEntity userEntity = UserEntity.fromJsonWithoutUid(data);
+          return userEntity.copyWith(uId: e.id);
+        })
+        .where((element) => element.uId != uId)
+        .cast<UserEntity>()
+        .toList();
   }
 
   @override

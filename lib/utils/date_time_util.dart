@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class DateTimeUtil {
   static String calculateLastTimeToString(Timestamp lastTime) {
@@ -18,8 +19,19 @@ class DateTimeUtil {
         return "Last seen yesterday";
       }
       return "Last seen $days days ago";
-    }else{
+    } else {
       return "Last seen long time ago";
+    }
+  }
+
+  static String timeStampToDayMonth(Timestamp createdTime) {
+    final date =
+        DateTime.fromMillisecondsSinceEpoch(createdTime.millisecondsSinceEpoch);
+    final String dayMonthString = DateFormat("d/M").format(date);
+    if (dayMonthString == DateFormat("d/M").format(DateTime.now())) {
+      return "Today";
+    } else {
+      return dayMonthString;
     }
   }
 }

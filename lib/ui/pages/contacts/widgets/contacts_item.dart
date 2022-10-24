@@ -33,62 +33,10 @@ class ContactsItem extends StatelessWidget {
           ),
           Row(
             children: [
-              Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Container(
-                    height: 56.h,
-                    width: 56.w,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      gradient: isOnline || !offLineWithinDay
-                          ? null
-                          : AppGradients.style1,
-                    ),
-                    padding: EdgeInsets.all(2.r),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        color: AppColors.neutralWhite,
-                      ),
-                      padding: EdgeInsets.all(2.r),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: CachedNetworkImage(
-                          placeholder: (context, url) =>
-                              AppAssets.lotties.lottieAppLoading.lottie(),
-                          fit: BoxFit.cover,
-                          imageUrl: user.avatarUrl,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Visibility(
-                    visible: isOnline || offLineWithinDay,
-                    child: Positioned(
-                      top: 0,
-                      right: 0,
-                      child: Container(
-                        width: 14.w,
-                        height: 14.h,
-                        padding: EdgeInsets.all(2.r),
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.neutralWhite,
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: isOnline
-                                ? AppColors.neutralSuccess
-                                : AppColors.branchDefault,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              AvatarWidget(
+                  isOnline: isOnline,
+                  offLineWithinDay: offLineWithinDay,
+                  user: user),
               SizedBox(
                 width: 12.w,
               ),
@@ -129,6 +77,80 @@ class ContactsItem extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class AvatarWidget extends StatelessWidget {
+  const AvatarWidget({
+    Key? key,
+    this.isOnline = false,
+    this.offLineWithinDay = false,
+    required this.user,
+    this.showDot = true,
+  }) : super(key: key);
+
+  final bool isOnline;
+  final bool offLineWithinDay;
+  final UserEntity user;
+  final bool showDot;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          height: 56.h,
+          width: 56.w,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            gradient:
+                isOnline || !offLineWithinDay ? null : AppGradients.style1,
+          ),
+          padding: EdgeInsets.all(2.r),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: AppColors.neutralWhite,
+            ),
+            padding: EdgeInsets.all(2.r),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: CachedNetworkImage(
+                placeholder: (context, url) =>
+                    AppAssets.lotties.lottieAppLoading.lottie(),
+                fit: BoxFit.cover,
+                imageUrl: user.avatarUrl,
+              ),
+            ),
+          ),
+        ),
+        Visibility(
+          visible: showDot && (isOnline || offLineWithinDay),
+          child: Positioned(
+            top: 0,
+            right: 0,
+            child: Container(
+              width: 14.w,
+              height: 14.h,
+              padding: EdgeInsets.all(2.r),
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.neutralWhite,
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: isOnline
+                      ? AppColors.neutralSuccess
+                      : AppColors.branchDefault,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:chat_app/common/app_themes.dart';
 import 'package:chat_app/configs/app_configs.dart';
 import 'package:chat_app/generated/l10n.dart';
 import 'package:chat_app/repositories/auth_repository.dart';
+import 'package:chat_app/repositories/chat_repository.dart';
 import 'package:chat_app/repositories/user_repository.dart';
 import 'package:chat_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,8 @@ class App extends StatelessWidget {
             create: (context) => AuthRepositoryImpl()),
         RepositoryProvider<UserRepository>(
             create: (context) => UserRepositoryImpl()),
+        RepositoryProvider<ChatRepository>(
+            create: (context) => ChatRepositoryImpl()),
       ],
       child: MultiBlocProvider(
         providers: [

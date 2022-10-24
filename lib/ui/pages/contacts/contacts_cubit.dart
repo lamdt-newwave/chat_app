@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:chat_app/blocs/app/app_cubit.dart';
 import 'package:chat_app/common/constants.dart';
 import 'package:chat_app/models/entities/user_entity.dart';
 import 'package:chat_app/models/enums/load_status.dart';
@@ -9,7 +10,12 @@ import 'package:equatable/equatable.dart';
 part 'contacts_state.dart';
 
 class ContactsCubit extends Cubit<ContactsState> {
-  ContactsCubit({required this.userRepository}) : super(const ContactsState());
+  final AppCubit appCubit;
+
+  ContactsCubit({
+    required this.userRepository,
+    required this.appCubit,
+  }) : super(const ContactsState());
 
   final UserRepository userRepository;
 
@@ -20,7 +26,8 @@ class ContactsCubit extends Cubit<ContactsState> {
   Future<void> fetchUsers() async {
     emit(state.copyWith(fetchUsersStatus: LoadStatus.loading));
     try {
-      final result = await userRepository.fetchUsers();
+      final result =
+          await userRepository.fetchUsersWithoutUid(appCubit.state.user!.uId);
       emit(state.copyWith(fetchUsersStatus: LoadStatus.success, users: result));
     } catch (e) {
       emit(state.copyWith(fetchUsersStatus: LoadStatus.failure));
@@ -29,12 +36,10 @@ class ContactsCubit extends Cubit<ContactsState> {
     FirebaseFirestore.instance
         .collection(AppConstants.usersKey)
         .snapshots()
-        .listen((querySnapshot) {
-      final users = querySnapshot.docs.map((e) {
-        UserEntity userEntity = UserEntity.fromJsonWithoutUid(e.data());
-        return userEntity.copyWith(uId: e.id);
-      }).toList();
-      emit(state.copyWith(users: users));
+        .listen((querySnapshot) async {
+      final result =
+          await userRepository.fetchUsersWithoutUid(appCubit.state.user!.uId);
+      emit(state.copyWith(fetchUsersStatus: LoadStatus.success, users: result));
     });
   }
 }
