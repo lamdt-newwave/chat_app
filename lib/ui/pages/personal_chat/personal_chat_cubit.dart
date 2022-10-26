@@ -29,21 +29,27 @@ class PersonalChatCubit extends Cubit<PersonalChatState> {
       if (roomId.isNotEmpty && userId.isNotEmpty) {
         final room = await chatRepository.getRoomById(roomId);
         final chatUser = await userRepository.getUserById(userId);
+        final user = await userRepository.getUserById(authRepository.getUid());
         emit(
           state.copyWith(
-              fetchRoomDataStatus: LoadStatus.success,
-              room: room,
-              chatUser: chatUser),
+            fetchRoomDataStatus: LoadStatus.success,
+            room: room,
+            chatUser: chatUser,
+            user: user,
+          ),
         );
       } else if (roomId.isEmpty && userId.isNotEmpty) {
         final room = await chatRepository.getRoomByChatUser(
             authRepository.getUid(), userId);
         final chatUser = await userRepository.getUserById(userId);
+        final user = await userRepository.getUserById(authRepository.getUid());
         emit(
           state.copyWith(
-              fetchRoomDataStatus: LoadStatus.success,
-              room: room,
-              chatUser: chatUser),
+            fetchRoomDataStatus: LoadStatus.success,
+            room: room,
+            chatUser: chatUser,
+            user: user,
+          ),
         );
       } else {
         emit(state.copyWith(fetchRoomDataStatus: LoadStatus.success));
