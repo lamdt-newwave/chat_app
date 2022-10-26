@@ -7,6 +7,7 @@ import 'package:chat_app/models/enums/load_status.dart';
 import 'package:chat_app/repositories/auth_repository.dart';
 import 'package:chat_app/repositories/chat_repository.dart';
 import 'package:chat_app/repositories/user_repository.dart';
+import 'package:chat_app/routes/app_routes.dart';
 import 'package:chat_app/ui/pages/chats/chats_cubit.dart';
 import 'package:chat_app/ui/pages/chats/widgets/room_item.dart';
 import 'package:chat_app/ui/pages/contacts/widgets/contacts_item.dart';
@@ -16,6 +17,7 @@ import 'package:chat_app/ui/widgets/text_field/search_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class ChatsPage extends StatelessWidget {
   const ChatsPage({Key? key}) : super(key: key);
@@ -281,7 +283,14 @@ class _ChatsChildPageState extends State<ChatsChildPage> {
             final UserEntity user = room.participants.firstWhere((element) =>
                 element.uId !=
                 RepositoryProvider.of<AuthRepository>(context).getUid());
-            return RoomItem(user: user, room: room);
+            return RoomItem(
+              user: user,
+              room: room,
+              onPressed: () {
+                Get.toNamed(AppRoutes.personalChatPage,
+                    parameters: {"userId": user.uId, "roomId": room.roomId});
+              },
+            );
           },
         );
       },

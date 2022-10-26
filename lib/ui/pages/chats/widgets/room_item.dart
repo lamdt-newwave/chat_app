@@ -12,26 +12,27 @@ class RoomItem extends StatelessWidget {
     Key? key,
     required this.user,
     required this.room,
+    required this.onPressed,
   }) : super(key: key);
 
   final UserEntity user;
   final RoomEntity room;
+  final Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return SizedBox(
-      child: Padding(
-        padding: EdgeInsets.only(top: 16.h),
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        height: 56.h,
+        margin: EdgeInsets.only(top: 16.h),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Padding(
-              padding: EdgeInsets.all(4.r),
-              child: AvatarWidget(
-                user: user,
-                isOnline: user.status == 1,
-              ),
+            AvatarWidget(
+              user: user,
+              isOnline: user.status == 1,
             ),
             SizedBox(
               width: 16.w,
@@ -47,17 +48,18 @@ class RoomItem extends StatelessWidget {
                       style: textTheme.bodyText1,
                     ),
                   ),
+                  const Spacer(),
+                  Text(
+                    room.getLastMessage(),
+                    style: textTheme.bodyText1?.copyWith(
+                        color: AppColors.neutralDisabled,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12.r,
+                        fontFamily: FontFamily.mulish),
+                  ),
                   SizedBox(
-                    height: 20.h,
-                    child: Text(
-                      room.getLastMessage(),
-                      style: textTheme.bodyText1?.copyWith(
-                          color: AppColors.neutralDisabled,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12.r,
-                          fontFamily: FontFamily.mulish),
-                    ),
-                  )
+                    height: 10.h,
+                  ),
                 ],
               ),
             ),
@@ -77,9 +79,7 @@ class RoomItem extends StatelessWidget {
                         fontFamily: FontFamily.mulish),
                   ),
                 ),
-                SizedBox(
-                  height: 10.h,
-                ),
+                const Spacer(),
                 room.getUnreadMessages() != 0
                     ? Container(
                         decoration: BoxDecoration(
@@ -98,6 +98,9 @@ class RoomItem extends StatelessWidget {
                         ),
                       )
                     : const SizedBox(),
+                SizedBox(
+                  height: 10.h,
+                ),
               ],
             )
           ],

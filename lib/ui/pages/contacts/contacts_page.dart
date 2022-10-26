@@ -3,6 +3,7 @@ import 'package:chat_app/generated/common/assets.gen.dart';
 import 'package:chat_app/generated/common/colors.gen.dart';
 import 'package:chat_app/models/enums/load_status.dart';
 import 'package:chat_app/repositories/user_repository.dart';
+import 'package:chat_app/routes/app_routes.dart';
 import 'package:chat_app/ui/pages/contacts/contacts_cubit.dart';
 import 'package:chat_app/ui/pages/contacts/widgets/contacts_item.dart';
 import 'package:chat_app/ui/widgets/commons/app_failure.dart';
@@ -11,6 +12,7 @@ import 'package:chat_app/ui/widgets/text_field/search_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class ContactsPage extends StatelessWidget {
   const ContactsPage({Key? key}) : super(key: key);
@@ -125,7 +127,11 @@ class _ContactsChildPageState extends State<ContactsChildPage> {
             final user = state.users[index];
             return ContactsItem(
               user: user,
-              onPressed: () {},
+              onPressed: () {
+                Get.toNamed(AppRoutes.personalChatPage, parameters: {
+                  "userId": user.uId,
+                });
+              },
               isOnline: user.status == 1,
               offLineWithinDay: (DateTime.now().millisecondsSinceEpoch -
                       user.lastTime.millisecondsSinceEpoch) <=

@@ -9,7 +9,7 @@ class RoomEntity {
   final List<MessageEntity> messages;
 
   RoomEntity(
-      {required this.roomId,
+      { this.roomId = "",
       this.participants = const [],
       this.messages = const []});
 
