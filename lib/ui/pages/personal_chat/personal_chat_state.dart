@@ -1,31 +1,45 @@
 part of 'personal_chat_cubit.dart';
 
 class PersonalChatState extends Equatable {
-  const PersonalChatState(
-      {this.room,
-      this.user,
-      this.chatUser,
-      this.fetchRoomDataStatus = LoadStatus.initial});
-
-  final RoomEntity? room;
-  final UserEntity? chatUser;
   final LoadStatus fetchRoomDataStatus;
-  final UserEntity? user;
+  final List<ChatMessage> messages;
+  final UserEntity? chatUser;
+  final RoomEntity room;
+  final LoadStatus messageStatus;
 
-  @override
-  List<Object?> get props => [room, chatUser, fetchRoomDataStatus, user];
+  PersonalChatState({
+    this.messages = const [],
+    this.chatUser,
+    RoomEntity? room,
+    this.fetchRoomDataStatus = LoadStatus.initial,
+    this.messageStatus = LoadStatus.initial,
+  }) : room = room ??
+            RoomEntity(
+              roomId: "",
+            );
 
   PersonalChatState copyWith({
+    LoadStatus? fetchRoomDataStatus,
+    List<ChatMessage>? messages,
     RoomEntity? room,
     UserEntity? chatUser,
-    UserEntity? user,
-    LoadStatus? fetchRoomDataStatus,
+    LoadStatus? messageStatus,
   }) {
     return PersonalChatState(
-      chatUser: chatUser ?? this.chatUser,
       room: room ?? this.room,
-      user: user ?? this.user,
+      chatUser: chatUser ?? this.chatUser,
+      messages: messages ?? this.messages,
       fetchRoomDataStatus: fetchRoomDataStatus ?? this.fetchRoomDataStatus,
+      messageStatus: messageStatus ?? this.messageStatus,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        fetchRoomDataStatus,
+        messages,
+        chatUser,
+        room,
+        messageStatus,
+      ];
 }

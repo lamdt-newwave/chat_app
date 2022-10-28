@@ -43,7 +43,6 @@ class ChatsCubit extends Cubit<ChatsState> {
       emit(state.copyWith(fetchRoomsStatus: LoadStatus.success, rooms: result));
     } catch (e) {
       emit(state.copyWith(fetchRoomsStatus: LoadStatus.failure));
-      print(e.toString());
     }
 
     FirebaseFirestore.instance

@@ -16,11 +16,17 @@ abstract class ChatRepository {
   Future<RoomEntity> getRoomByChatUser(String uId, String chatUserId);
 
   Future<RoomEntity> getRoomById(String roomId);
+
+  Future<MessageEntity> addNewMessage(MessageEntity messageEntity);
+
+  Future<RoomEntity> addNewRoom(String chatUserId);
 }
 
 class ChatRepositoryImpl extends ChatRepository {
   final CollectionReference rooms =
       FirebaseFirestore.instance.collection(AppConstants.roomsKey);
+  final CollectionReference messages =
+      FirebaseFirestore.instance.collection(AppConstants.messagesKey);
   final UserRepository userRepository = UserRepositoryImpl();
   final AuthRepository authRepository = AuthRepositoryImpl();
 
@@ -33,28 +39,34 @@ class ChatRepositoryImpl extends ChatRepository {
 
   @override
   Future<List<RoomEntity>> fetchRooms(String uId) async {
-    final roomDoc = await rooms.orderBy("updatedTime", descending: true).get();
+    final roomColl = await rooms.orderBy("updatedTime", descending: true).get();
     List<RoomEntity> result = [];
-    for (var queryDocumentSnapshot in roomDoc.docs) {
+    for (var queryDocumentSnapshot in roomColl.docs) {
       if ((queryDocumentSnapshot.get(AppConstants.participantsKey) as List)
           .contains(uId)) {
         final List<UserEntity> participants = [];
-
         for (String participantId
             in queryDocumentSnapshot.get(AppConstants.participantsKey)) {
           UserEntity user = await userRepository.getUserById(participantId);
           participants.add(user);
         }
-        final messagesCollection = await rooms
-            .doc(queryDocumentSnapshot.id)
-            .collection(AppConstants.messagesKey)
+        final messagesColl = await messages
+            .where("roomId", isEqualTo: queryDocumentSnapshot.id)
             .get();
-        final List<MessageEntity> messages = messagesCollection.docs.map((e) {
-          return MessageEntity.fromJson(e.data()).copyWith(messageId: e.id);
-        }).toList();
+        List<MessageEntity> messagesList = [];
+
+        if (messagesColl.docs.isNotEmpty) {
+          for (var messageSnapshot in messagesColl.docs) {
+            final MessageEntity messageEntity = MessageEntity.fromJson(
+                    messageSnapshot.data() as Map<String, dynamic>)
+                .copyWith(messageId: messageSnapshot.id);
+            messagesList.add(messageEntity);
+          }
+        }
+
         result.add(RoomEntity(
             roomId: queryDocumentSnapshot.id,
-            messages: messages,
+            messages: messagesList,
             participants: participants));
       }
     }
@@ -69,14 +81,20 @@ class ChatRepositoryImpl extends ChatRepository {
       UserEntity user = await userRepository.getUserById(participantId);
       participants.add(user);
     }
-    final messagesCollection =
-        await rooms.doc(roomDoc.id).collection(AppConstants.messagesKey).get();
-    final List<MessageEntity> messages = messagesCollection.docs.map((e) {
-      return MessageEntity.fromJson(e.data()).copyWith(messageId: e.id);
-    }).toList();
+    final messagesColl = await messages
+        .orderBy("createdTime")
+        .where("roomId", isEqualTo: roomId)
+        .get();
+    List<MessageEntity> messagesList = [];
+    for (var messageSnapshot in messagesColl.docs) {
+      final MessageEntity messageEntity =
+          MessageEntity.fromJson(messageSnapshot.data() as Map<String, dynamic>)
+              .copyWith(messageId: messageSnapshot.id);
+      messagesList.add(messageEntity);
+    }
 
     return RoomEntity(
-        roomId: roomDoc.id, messages: messages, participants: participants);
+        roomId: roomDoc.id, messages: messagesList, participants: participants);
   }
 
   @override
@@ -93,19 +111,44 @@ class ChatRepositoryImpl extends ChatRepository {
           UserEntity user = await userRepository.getUserById(participantId);
           participants.add(user);
         }
-        final messagesCollection = await rooms
-            .doc(queryDocumentSnapshot.id)
-            .collection(AppConstants.messagesKey)
+        final messagesColl = await messages
+            .orderBy("createdTime")
+            .where("roomId", isEqualTo: queryDocumentSnapshot.id)
             .get();
-        final List<MessageEntity> messages = messagesCollection.docs.map((e) {
-          return MessageEntity.fromJson(e.data()).copyWith(messageId: e.id);
-        }).toList();
+        List<MessageEntity> messagesList = [];
+        for (var messageSnapshot in messagesColl.docs) {
+          final MessageEntity messageEntity = MessageEntity.fromJson(
+                  messageSnapshot.data() as Map<String, dynamic>)
+              .copyWith(messageId: messageSnapshot.id);
+          messagesList.add(messageEntity);
+        }
+        ;
+
         return RoomEntity(
             roomId: queryDocumentSnapshot.id,
-            messages: messages,
+            messages: messagesList,
             participants: participants);
       }
     }
     return RoomEntity();
+  }
+
+  @override
+  Future<MessageEntity> addNewMessage(MessageEntity messageEntity) async {
+    final messageId =
+        (await messages.add(messageEntity.toJsonWithoutMessageId())).id;
+    return messageEntity.copyWith(messageId: messageId);
+  }
+
+  @override
+  Future<RoomEntity> addNewRoom(String chatUserId) async {
+    final roomId = (await rooms.add({
+      "createdTime": Timestamp.now(),
+      "updatedTime": Timestamp.now(),
+      "participants": [authRepository.getUid(), chatUserId]
+    }))
+        .id;
+
+    return RoomEntity(roomId: roomId);
   }
 }

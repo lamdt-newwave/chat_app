@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MessageEntity {
-  final messageId;
+  final String messageId;
   final String authorId;
   final Timestamp createdTime;
   final String roomId;
@@ -20,12 +20,25 @@ class MessageEntity {
     this.text = "",
     this.typeMedia = "",
     required this.updatedTime,
-    required this.mediaUrl,
+    this.mediaUrl = "",
   });
 
   Map<String, dynamic> toJson() {
     return {
-      messageId: messageId,
+      'messageId': messageId,
+      'authorId': authorId,
+      'createdTime': createdTime,
+      'roomId': roomId,
+      'status': status,
+      'text': text,
+      'typeMedia': typeMedia,
+      'updatedTime': updatedTime,
+      'mediaUrl': mediaUrl,
+    };
+  }
+
+  Map<String, dynamic> toJsonWithoutMessageId() {
+    return {
       'authorId': authorId,
       'createdTime': createdTime,
       'roomId': roomId,

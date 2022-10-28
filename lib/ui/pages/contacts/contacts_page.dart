@@ -129,7 +129,7 @@ class _ContactsChildPageState extends State<ContactsChildPage> {
               user: user,
               onPressed: () {
                 Get.toNamed(AppRoutes.personalChatPage, parameters: {
-                  "userId": user.uId,
+                  "chatUserId": user.uId,
                 });
               },
               isOnline: user.status == 1,

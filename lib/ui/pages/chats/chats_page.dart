@@ -287,8 +287,10 @@ class _ChatsChildPageState extends State<ChatsChildPage> {
               user: user,
               room: room,
               onPressed: () {
-                Get.toNamed(AppRoutes.personalChatPage,
-                    parameters: {"userId": user.uId, "roomId": room.roomId});
+                Get.toNamed(AppRoutes.personalChatPage, parameters: {
+                  "chatUserId": user.uId,
+                  "roomId": room.roomId
+                });
               },
             );
           },

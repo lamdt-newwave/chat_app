@@ -4,6 +4,7 @@ import 'package:chat_app/models/entities/room_entity.dart';
 import 'package:chat_app/models/entities/user_entity.dart';
 import 'package:chat_app/ui/pages/contacts/widgets/contacts_item.dart';
 import 'package:chat_app/utils/date_time_util.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -70,8 +71,10 @@ class RoomItem extends StatelessWidget {
                 SizedBox(
                   height: 16.h,
                   child: Text(
-                    DateTimeUtil.timeStampToDayMonth(
-                        room.messages.last.createdTime),
+                    room.messages.isNotEmpty
+                        ? DateTimeUtil.timeStampToDayMonth(
+                            room.messages.last.createdTime)
+                        : DateTimeUtil.timeStampToDayMonth(Timestamp.now()),
                     style: textTheme.bodyText1?.copyWith(
                         color: AppColors.neutralWeak,
                         fontWeight: FontWeight.w400,
