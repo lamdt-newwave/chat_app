@@ -13,12 +13,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   sharedPreferencesHelper.init();
-
   FirebaseFirestore.instance.settings = const Settings(
     persistenceEnabled: true,
     cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
   );
-
   final storage = await HydratedStorage.build(
       storageDirectory: kIsWeb
           ? HydratedStorage.webStorageDirectory

@@ -2,7 +2,7 @@ part of 'personal_chat_cubit.dart';
 
 class PersonalChatState extends Equatable {
   final LoadStatus fetchRoomDataStatus;
-  final List<ChatMessage> messages;
+  final List<MessageEntity> messages;
   final UserEntity? chatUser;
   final RoomEntity room;
   final LoadStatus messageStatus;
@@ -20,7 +20,7 @@ class PersonalChatState extends Equatable {
 
   PersonalChatState copyWith({
     LoadStatus? fetchRoomDataStatus,
-    List<ChatMessage>? messages,
+    List<MessageEntity>? messages,
     RoomEntity? room,
     UserEntity? chatUser,
     LoadStatus? messageStatus,

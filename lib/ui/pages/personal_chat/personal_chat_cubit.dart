@@ -1,19 +1,22 @@
-import 'dart:convert';
-import 'dart:math';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:chat_app/common/constants.dart';
 import 'package:chat_app/models/entities/message_entity.dart';
 import 'package:chat_app/models/entities/room_entity.dart';
 import 'package:chat_app/models/entities/user_entity.dart';
 import 'package:chat_app/models/enums/load_status.dart';
+import 'package:chat_app/models/enums/message_type.dart';
 import 'package:chat_app/repositories/auth_repository.dart';
 import 'package:chat_app/repositories/chat_repository.dart';
 import 'package:chat_app/repositories/user_repository.dart';
+import 'package:chat_app/ui/widgets/commons/app_dialogs.dart';
+import 'package:chat_app/utils/app_stream.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:equatable/equatable.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
+import 'package:mime/mime.dart';
 
 part 'personal_chat_state.dart';
 
@@ -28,37 +31,37 @@ class PersonalChatCubit extends Cubit<PersonalChatState> {
   final AuthRepository authRepository;
   final UserRepository userRepository;
 
-  Future<void> fetchInitData() async {
+  Future<void> fetchInitData(AppStream appStream) async {
     emit(state.copyWith(fetchRoomDataStatus: LoadStatus.loading));
     try {
       final String roomId = Get.parameters["roomId"] ?? "";
       final String chatUserId = Get.parameters["chatUserId"] ?? "";
-
       // Navigate from chats page
       if (roomId.isNotEmpty) {
         final room = await chatRepository.getRoomById(roomId);
         final UserEntity chatUser =
             await userRepository.getUserById(chatUserId);
-
         emit(
           state.copyWith(
             fetchRoomDataStatus: LoadStatus.success,
             room: room,
+            messages: room.messages,
             chatUser: chatUser,
           ),
         );
       }
+
       // Navigate from contacts page
       else if (roomId.isEmpty) {
         final UserEntity chatUser =
             await userRepository.getUserById(chatUserId);
         final room = await chatRepository.getRoomByChatUser(
             authRepository.getUid(), chatUserId);
-
         if (room.roomId.isNotEmpty) {
           emit(
             state.copyWith(
               room: room,
+              messages: room.messages,
               fetchRoomDataStatus: LoadStatus.success,
               chatUser: chatUser,
             ),
@@ -68,6 +71,7 @@ class PersonalChatCubit extends Cubit<PersonalChatState> {
           emit(
             state.copyWith(
               chatUser: chatUser,
+              messages: room.messages,
               room: room,
               fetchRoomDataStatus: LoadStatus.success,
             ),
@@ -78,6 +82,8 @@ class PersonalChatCubit extends Cubit<PersonalChatState> {
             await userRepository.getUserById(chatUserId);
         emit(
           state.copyWith(
+            messages: [],
+            room: RoomEntity(),
             chatUser: chatUser,
             fetchRoomDataStatus: LoadStatus.success,
           ),
@@ -86,39 +92,41 @@ class PersonalChatCubit extends Cubit<PersonalChatState> {
     } catch (e) {
       emit(
         state.copyWith(
+          messages: [],
+          chatUser: null,
+          room: RoomEntity(),
           fetchRoomDataStatus: LoadStatus.failure,
         ),
       );
     }
-
-    FirebaseFirestore.instance
-        .collection(AppConstants.messagesKey)
-        .snapshots()
-        .listen((querySnapshot) async {
-      // final result =
-      // await chatRepository.getMessagesByRoomId(state.room.roomId);
-      // emit(state.copyWith(room:);
-    });
   }
 
-  Future<void> onSendMessage(ChatMessage newMessage) async {
+  Future<void> loadMessages() async {
+    final result = await chatRepository.getMessagesByRoomId(state.room.roomId);
+    emit(
+      state.copyWith(messages: result),
+    );
+  }
+
+  Future<void> onSendTextMessage(String newMessage) async {
     emit(state.copyWith(messageStatus: LoadStatus.loading));
     try {
       final result = await chatRepository.addNewMessage(
         MessageEntity(
-          text: newMessage.text,
+          type: MessageType.text.toString(),
+          text: newMessage,
           authorId: authRepository.getUid(),
           createdTime: Timestamp.now(),
           roomId: state.room.roomId,
           updatedTime: Timestamp.now(),
         ),
       );
-      final List<ChatMessage> messages = [];
-      messages.add(newMessage);
-      messages.addAll(state.messages);
+      final List<MessageEntity> messages = [];
+      messages.addAll(state.room.messages);
+      messages.add(result);
       emit(
         state.copyWith(
-          messages: messages,
+          room: state.room.copyWith(messages: messages),
           messageStatus: LoadStatus.success,
         ),
       );
@@ -131,9 +139,73 @@ class PersonalChatCubit extends Cubit<PersonalChatState> {
     }
   }
 
-  String randomString() {
-    final random = Random.secure();
-    final values = List<int>.generate(16, (i) => random.nextInt(255));
-    return base64UrlEncode(values);
+  Future<List<MessageEntity>> sendMessage(
+      {String text = "", String url = "", required MessageType type}) async {
+    final result = await chatRepository.addNewMessage(
+      MessageEntity(
+          text: text,
+          type: type.toString(),
+          authorId: authRepository.getUid(),
+          createdTime: Timestamp.now(),
+          roomId: state.room.roomId,
+          updatedTime: Timestamp.now(),
+          mediaUrl: url),
+    );
+    final List<MessageEntity> messages = [];
+    messages.addAll(state.room.messages);
+    messages.add(result);
+    return messages;
+  }
+
+  Future<void> onUploadFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      dialogTitle: "Please select file to upload!!",
+    );
+
+    try {
+      AppDialogs.showLoadingDialog();
+      if (result != null) {
+        File file = File(result.files.single.path!);
+        String? mimeStr = lookupMimeType(file.path);
+        var fileType = mimeStr?.split('/').first;
+        final storageRef = FirebaseStorage.instance.ref();
+
+        if (fileType == "image") {
+          final imageRef =
+              storageRef.child("images/${result.files.single.name}");
+          await imageRef.putFile(file).then((taskSnapShot) async {
+            final url = await imageRef.getDownloadURL();
+            final List<MessageEntity> messages =
+                await sendMessage(type: MessageType.image, url: url);
+            emit(
+              state.copyWith(
+                room: state.room.copyWith(messages: messages),
+                messageStatus: LoadStatus.success,
+              ),
+            );
+            Get.back();
+          });
+        } else {
+          final imageRef =
+              storageRef.child("files/${result.files.single.name}");
+          await imageRef.putFile(file).then((taskSnapShot) async {
+            final url = await imageRef.getDownloadURL();
+            final List<MessageEntity> messages =
+                await sendMessage(type: MessageType.file, url: url);
+            emit(
+              state.copyWith(
+                room: state.room.copyWith(messages: messages),
+                messageStatus: LoadStatus.success,
+              ),
+            );
+            Get.back();
+          });
+        }
+      } else {
+        Get.back();
+      }
+    } catch (e) {
+      Get.back();
+    }
   }
 }

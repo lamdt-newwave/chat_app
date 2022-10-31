@@ -41,7 +41,7 @@ class RoomEntity {
     if (lastMessage.text.isNotEmpty) {
       return lastMessage.text;
     } else {
-      if (lastMessage.typeMedia.contains("image/")) {
+      if (lastMessage.type.contains("image/")) {
         return "Image";
       } else {
         return "Something. Don't know!!! ";

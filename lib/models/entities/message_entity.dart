@@ -7,7 +7,7 @@ class MessageEntity {
   final String roomId;
   final int status;
   final String text;
-  final String typeMedia;
+  final String type;
   final Timestamp updatedTime;
   final String mediaUrl;
 
@@ -18,7 +18,7 @@ class MessageEntity {
     required this.roomId,
     this.status = 0,
     this.text = "",
-    this.typeMedia = "",
+    this.type = "",
     required this.updatedTime,
     this.mediaUrl = "",
   });
@@ -31,7 +31,7 @@ class MessageEntity {
       'roomId': roomId,
       'status': status,
       'text': text,
-      'typeMedia': typeMedia,
+      'type': type,
       'updatedTime': updatedTime,
       'mediaUrl': mediaUrl,
     };
@@ -44,7 +44,7 @@ class MessageEntity {
       'roomId': roomId,
       'status': status,
       'text': text,
-      'typeMedia': typeMedia,
+      'type': type,
       'updatedTime': updatedTime,
       'mediaUrl': mediaUrl,
     };
@@ -59,7 +59,7 @@ class MessageEntity {
       mediaUrl: json["mediaUrl"],
       status: json["status"],
       text: json["text"],
-      typeMedia: json["typeMedia"],
+      type: json["type"],
     );
   }
 
@@ -70,7 +70,7 @@ class MessageEntity {
     String? roomId,
     int? status,
     String? text,
-    String? typeMedia,
+    String? type,
     Timestamp? updatedTime,
     String? mediaUrl,
   }) {
@@ -82,7 +82,7 @@ class MessageEntity {
       mediaUrl: mediaUrl ?? this.mediaUrl,
       status: status ?? this.status,
       text: text ?? this.text,
-      typeMedia: typeMedia ?? this.typeMedia,
+      type: type ?? this.type,
     );
   }
 }

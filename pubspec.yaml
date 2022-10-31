@@ -52,6 +52,10 @@ dependencies:
   awesome_snackbar_content: ^0.0.8
   dash_chat_2: ^0.0.15
   bubble: ^1.2.1
+  file_picker: ^5.2.2
+  mime: ^1.0.2
+
+  url_launcher: ^6.1.6
 dev_dependencies:
   flutter_test:
     sdk: flutter
