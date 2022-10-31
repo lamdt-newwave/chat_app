@@ -4,9 +4,7 @@ import 'package:intl/intl.dart';
 class DateTimeUtil {
   static String calculateLastTimeToString(Timestamp lastTime) {
     int distance =
-        DateTime
-            .now()
-            .millisecondsSinceEpoch - lastTime.millisecondsSinceEpoch;
+        DateTime.now().millisecondsSinceEpoch - lastTime.millisecondsSinceEpoch;
     if (distance <= const Duration(minutes: 1).inMilliseconds) {
       return "Last seen few seconds ago";
     } else if (distance <= const Duration(hours: 1).inMilliseconds) {
@@ -28,7 +26,7 @@ class DateTimeUtil {
 
   static String timeStampToDayMonth(Timestamp createdTime) {
     final date =
-    DateTime.fromMillisecondsSinceEpoch(createdTime.millisecondsSinceEpoch);
+        DateTime.fromMillisecondsSinceEpoch(createdTime.millisecondsSinceEpoch);
     final String dayMonthString = DateFormat("d/M").format(date);
     if (dayMonthString == DateFormat("d/M").format(DateTime.now())) {
       return "Today";
@@ -39,7 +37,7 @@ class DateTimeUtil {
 
   static String timeStampToHoursMinutes(Timestamp createdTime) {
     final date =
-    DateTime.fromMillisecondsSinceEpoch(createdTime.millisecondsSinceEpoch);
+        DateTime.fromMillisecondsSinceEpoch(createdTime.millisecondsSinceEpoch);
     final String hoursMinutesString = DateFormat("hh.mm").format(date);
     return hoursMinutesString;
   }

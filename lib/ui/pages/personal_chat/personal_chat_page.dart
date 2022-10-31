@@ -193,7 +193,18 @@ class _PersonalChatChildPageState extends State<PersonalChatChildPage> {
           child: DashChat(
             currentUser: user,
             onSend: _cubit.onSendMessage,
-            messages: state.messages,
+            messages: state.room.messages
+                .map(
+                  (e) => ChatMessage(
+                    text: e.text,
+                    user: ChatUser(
+                      id: e.authorId,
+                    ),
+                    createdAt: DateTime.fromMillisecondsSinceEpoch(
+                        e.createdTime.millisecondsSinceEpoch),
+                  ),
+                )
+                .toList(),
             messageListOptions: MessageListOptions(
               onLoadEarlier: () async {
                 await Future.delayed(const Duration(seconds: 3));

@@ -4,7 +4,6 @@ import 'package:chat_app/generated/l10n.dart';
 import 'package:chat_app/ui/pages/sign_up_with_phone/sign_up_with_phone_cubit.dart';
 import 'package:chat_app/ui/widgets/button/normal_button.dart';
 import 'package:chat_app/ui/widgets/commons/app_dialogs.dart';
-import 'package:chat_app/ui/widgets/commons/wrapper.dart';
 import 'package:country_pickers/country_pickers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,7 +44,7 @@ class EnterPhonePage extends StatelessWidget {
                 ),
                 Column(
                   children: [
-                    Wrapper(
+                    SizedBox(
                       height: 30.h,
                       child: Text(
                         I10n.current.text_enter_phone,
@@ -55,7 +54,7 @@ class EnterPhonePage extends StatelessWidget {
                     SizedBox(
                       height: 8.h,
                     ),
-                    Wrapper(
+                    SizedBox(
                       height: 48.h,
                       child: Text(
                         I10n.current.text_please_confirm_country,
@@ -96,6 +95,7 @@ class EnterPhonePage extends StatelessWidget {
           onTap: () => AppDialogs.showCountryPicker(
               onValuePicked: cubit.onSelectedCountryChanged),
           child: Container(
+            height: 40.h,
             padding: EdgeInsets.all(6.r),
             decoration: BoxDecoration(
               color: AppColors.neutralOffWhite,
@@ -143,10 +143,10 @@ class EnterPhonePage extends StatelessWidget {
         ),
         Expanded(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                height: 36.h,
+                height: 40.h,
                 child: TextFormField(
                   onChanged: cubit.onPhoneNumberChanged,
                   cursorHeight: 24.h,
@@ -155,8 +155,15 @@ class EnterPhonePage extends StatelessWidget {
                   style: textTheme.bodyText1
                       ?.copyWith(color: AppColors.neutralDisabled),
                   decoration: InputDecoration(
+                    contentPadding: EdgeInsets.only(top: 4.h, left: 8.w),
                     fillColor: AppColors.neutralOffWhite,
-                    border: InputBorder.none,
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        width: 0,
+                        style: BorderStyle.none,
+                      ),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
                     filled: true,
                     hintText: I10n.current.text_phone_number,
                     hintStyle: textTheme.bodyText1?.copyWith(

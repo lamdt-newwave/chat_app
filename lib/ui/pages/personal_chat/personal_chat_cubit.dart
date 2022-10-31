@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:bloc/bloc.dart';
+import 'package:chat_app/common/constants.dart';
 import 'package:chat_app/models/entities/message_entity.dart';
 import 'package:chat_app/models/entities/room_entity.dart';
 import 'package:chat_app/models/entities/user_entity.dart';
@@ -32,49 +33,33 @@ class PersonalChatCubit extends Cubit<PersonalChatState> {
     try {
       final String roomId = Get.parameters["roomId"] ?? "";
       final String chatUserId = Get.parameters["chatUserId"] ?? "";
+
+      // Navigate from chats page
       if (roomId.isNotEmpty) {
         final room = await chatRepository.getRoomById(roomId);
         final UserEntity chatUser =
             await userRepository.getUserById(chatUserId);
-        final List<ChatMessage> messages = room.messages
-            .map((e) => ChatMessage(
-                text: e.text,
-                user: ChatUser(
-                  id: e.authorId,
-                ),
-                createdAt: DateTime.fromMillisecondsSinceEpoch(
-                    e.createdTime.millisecondsSinceEpoch)))
-            .toList();
 
         emit(
           state.copyWith(
             fetchRoomDataStatus: LoadStatus.success,
-            messages: List.from(messages.reversed),
             room: room,
             chatUser: chatUser,
           ),
         );
-      } else if (roomId.isEmpty) {
+      }
+      // Navigate from contacts page
+      else if (roomId.isEmpty) {
         final UserEntity chatUser =
             await userRepository.getUserById(chatUserId);
         final room = await chatRepository.getRoomByChatUser(
             authRepository.getUid(), chatUserId);
 
         if (room.roomId.isNotEmpty) {
-          final List<ChatMessage> messages = room.messages
-              .map((e) => ChatMessage(
-                  text: e.text,
-                  user: ChatUser(
-                    id: e.authorId,
-                  ),
-                  createdAt: DateTime.fromMillisecondsSinceEpoch(
-                      e.createdTime.millisecondsSinceEpoch)))
-              .toList();
           emit(
             state.copyWith(
               room: room,
               fetchRoomDataStatus: LoadStatus.success,
-              messages: List.from(messages.reversed),
               chatUser: chatUser,
             ),
           );
@@ -99,21 +84,35 @@ class PersonalChatCubit extends Cubit<PersonalChatState> {
         );
       }
     } catch (e) {
-      emit(state.copyWith(
-        fetchRoomDataStatus: LoadStatus.failure,
-      ));
+      emit(
+        state.copyWith(
+          fetchRoomDataStatus: LoadStatus.failure,
+        ),
+      );
     }
+
+    FirebaseFirestore.instance
+        .collection(AppConstants.messagesKey)
+        .snapshots()
+        .listen((querySnapshot) async {
+      // final result =
+      // await chatRepository.getMessagesByRoomId(state.room.roomId);
+      // emit(state.copyWith(room:);
+    });
   }
 
   Future<void> onSendMessage(ChatMessage newMessage) async {
     emit(state.copyWith(messageStatus: LoadStatus.loading));
     try {
-      final result = await chatRepository.addNewMessage(MessageEntity(
+      final result = await chatRepository.addNewMessage(
+        MessageEntity(
           text: newMessage.text,
           authorId: authRepository.getUid(),
           createdTime: Timestamp.now(),
           roomId: state.room.roomId,
-          updatedTime: Timestamp.now()));
+          updatedTime: Timestamp.now(),
+        ),
+      );
       final List<ChatMessage> messages = [];
       messages.add(newMessage);
       messages.addAll(state.messages);
@@ -124,9 +123,11 @@ class PersonalChatCubit extends Cubit<PersonalChatState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(
-        messageStatus: LoadStatus.failure,
-      ));
+      emit(
+        state.copyWith(
+          messageStatus: LoadStatus.failure,
+        ),
+      );
     }
   }
 

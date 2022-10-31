@@ -283,16 +283,18 @@ class _ChatsChildPageState extends State<ChatsChildPage> {
             final UserEntity user = room.participants.firstWhere((element) =>
                 element.uId !=
                 RepositoryProvider.of<AuthRepository>(context).getUid());
-            return RoomItem(
-              user: user,
-              room: room,
-              onPressed: () {
-                Get.toNamed(AppRoutes.personalChatPage, parameters: {
-                  "chatUserId": user.uId,
-                  "roomId": room.roomId
-                });
-              },
-            );
+            return room.messages.isNotEmpty
+                ? RoomItem(
+                    user: user,
+                    room: room,
+                    onPressed: () {
+                      Get.toNamed(AppRoutes.personalChatPage, parameters: {
+                        "chatUserId": user.uId,
+                        "roomId": room.roomId
+                      });
+                    },
+                  )
+                : const SizedBox();
           },
         );
       },
