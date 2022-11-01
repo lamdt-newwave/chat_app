@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class MessageEntity {
   final String messageId;
   final String authorId;
+  final String repliedMessageId;
   final Timestamp createdTime;
   final String roomId;
   final int status;
@@ -12,6 +13,7 @@ class MessageEntity {
   final String mediaUrl;
 
   MessageEntity({
+    this.repliedMessageId = "",
     this.messageId = "",
     required this.authorId,
     required this.createdTime,
@@ -25,6 +27,7 @@ class MessageEntity {
 
   Map<String, dynamic> toJson() {
     return {
+      'repliedMessageId': repliedMessageId,
       'messageId': messageId,
       'authorId': authorId,
       'createdTime': createdTime,
@@ -39,6 +42,7 @@ class MessageEntity {
 
   Map<String, dynamic> toJsonWithoutMessageId() {
     return {
+      'repliedMessageId': repliedMessageId,
       'authorId': authorId,
       'createdTime': createdTime,
       'roomId': roomId,
@@ -52,6 +56,7 @@ class MessageEntity {
 
   static MessageEntity fromJson(Map<String, dynamic> json) {
     return MessageEntity(
+      repliedMessageId: json['repliedMessageId'],
       authorId: json["authorId"],
       createdTime: json["createdTime"],
       roomId: json["roomId"],
@@ -73,8 +78,11 @@ class MessageEntity {
     String? type,
     Timestamp? updatedTime,
     String? mediaUrl,
+    String? repliedMessageId,
   }) {
     return MessageEntity(
+      messageId: messageId ?? this.messageId,
+      repliedMessageId: repliedMessageId ?? this.repliedMessageId,
       authorId: authorId ?? this.authorId,
       createdTime: createdTime ?? this.createdTime,
       roomId: roomId ?? this.roomId,

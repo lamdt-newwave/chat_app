@@ -52,15 +52,12 @@ class _PersonalChatChildPageState extends State<PersonalChatChildPage> {
     _cubit = context.read<PersonalChatCubit>();
     _cubit.fetchInitData(appStream);
     user = ChatUser(id: context.read<AppCubit>().state.user!.uId);
-
-    appStream.messagesController.stream.listen((event) {
-      _cubit.loadMessages();
-    });
   }
 
   @override
   void dispose() {
     super.dispose();
+    _cubit.close();
   }
 
   @override
@@ -204,6 +201,7 @@ class _PersonalChatChildPageState extends State<PersonalChatChildPage> {
         return Container(
           color: AppColors.neutralOffWhite,
           child: ChatWidget(
+            chatUser: state.chatUser!,
             author: state.room.participants
                 .firstWhere((element) => element.uId != state.chatUser!.uId),
             messages: List<MessageEntity>.from(state.messages.reversed),
@@ -211,6 +209,8 @@ class _PersonalChatChildPageState extends State<PersonalChatChildPage> {
               _cubit.onSendTextMessage(newMessage);
             },
             onAttachFile: _cubit.onUploadFile,
+            onReplyMessage: _cubit.onReplyMessage,
+            replyingMessageId: state.replyingMessageId,
           ),
         );
       },

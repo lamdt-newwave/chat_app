@@ -99,6 +99,10 @@ class PersonalChatCubit extends Cubit<PersonalChatState> {
         ),
       );
     }
+
+    appStream.messagesController.stream.listen((event) {
+      loadMessages();
+    });
   }
 
   Future<void> loadMessages() async {
@@ -113,6 +117,7 @@ class PersonalChatCubit extends Cubit<PersonalChatState> {
     try {
       final result = await chatRepository.addNewMessage(
         MessageEntity(
+          repliedMessageId: state.replyingMessageId,
           type: MessageType.text.toString(),
           text: newMessage,
           authorId: authRepository.getUid(),
@@ -126,14 +131,15 @@ class PersonalChatCubit extends Cubit<PersonalChatState> {
       messages.add(result);
       emit(
         state.copyWith(
-          room: state.room.copyWith(messages: messages),
-          messageStatus: LoadStatus.success,
-        ),
+            room: state.room.copyWith(messages: messages),
+            messageStatus: LoadStatus.success,
+            replyingMessageId: ""),
       );
     } catch (e) {
       emit(
         state.copyWith(
           messageStatus: LoadStatus.failure,
+          replyingMessageId: "",
         ),
       );
     }
@@ -143,6 +149,7 @@ class PersonalChatCubit extends Cubit<PersonalChatState> {
       {String text = "", String url = "", required MessageType type}) async {
     final result = await chatRepository.addNewMessage(
       MessageEntity(
+          repliedMessageId: state.replyingMessageId,
           text: text,
           type: type.toString(),
           authorId: authRepository.getUid(),
@@ -169,7 +176,6 @@ class PersonalChatCubit extends Cubit<PersonalChatState> {
         String? mimeStr = lookupMimeType(file.path);
         var fileType = mimeStr?.split('/').first;
         final storageRef = FirebaseStorage.instance.ref();
-
         if (fileType == "image") {
           final imageRef =
               storageRef.child("images/${result.files.single.name}");
@@ -183,13 +189,39 @@ class PersonalChatCubit extends Cubit<PersonalChatState> {
                 messageStatus: LoadStatus.success,
               ),
             );
-            Get.back();
+          });
+        } else if (fileType == "audio") {
+          final audioRef =
+              storageRef.child("audio/${result.files.single.name}");
+          await audioRef.putFile(file).then((taskSnapShot) async {
+            final url = await audioRef.getDownloadURL();
+            final List<MessageEntity> messages =
+                await sendMessage(type: MessageType.audio, url: url);
+            emit(
+              state.copyWith(
+                room: state.room.copyWith(messages: messages),
+                messageStatus: LoadStatus.success,
+              ),
+            );
+          });
+        } else if (fileType == "video") {
+          final audioRef =
+              storageRef.child("videos/${result.files.single.name}");
+          await audioRef.putFile(file).then((taskSnapShot) async {
+            final url = await audioRef.getDownloadURL();
+            final List<MessageEntity> messages =
+                await sendMessage(type: MessageType.video, url: url);
+            emit(
+              state.copyWith(
+                room: state.room.copyWith(messages: messages),
+                messageStatus: LoadStatus.success,
+              ),
+            );
           });
         } else {
-          final imageRef =
-              storageRef.child("files/${result.files.single.name}");
-          await imageRef.putFile(file).then((taskSnapShot) async {
-            final url = await imageRef.getDownloadURL();
+          final fileRef = storageRef.child("files/${result.files.single.name}");
+          await fileRef.putFile(file).then((taskSnapShot) async {
+            final url = await fileRef.getDownloadURL();
             final List<MessageEntity> messages =
                 await sendMessage(type: MessageType.file, url: url);
             emit(
@@ -198,14 +230,16 @@ class PersonalChatCubit extends Cubit<PersonalChatState> {
                 messageStatus: LoadStatus.success,
               ),
             );
-            Get.back();
           });
         }
-      } else {
-        Get.back();
-      }
+      } else {}
+      Get.back();
     } catch (e) {
       Get.back();
     }
+  }
+
+  void onReplyMessage(String repliedMessageId) {
+    emit(state.copyWith(replyingMessageId: repliedMessageId));
   }
 }

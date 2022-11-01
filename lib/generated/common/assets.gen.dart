@@ -34,6 +34,14 @@ class $AssetsLottiesGen {
   LottieGenImage get lottieAppLoading =>
       const LottieGenImage('assets/lotties/lottie_app_loading.json');
 
+  /// File path: assets/lotties/lottie_audio.json
+  LottieGenImage get lottieAudio =>
+      const LottieGenImage('assets/lotties/lottie_audio.json');
+
+  /// File path: assets/lotties/lottie_audio_message.json
+  LottieGenImage get lottieAudioMessage =>
+      const LottieGenImage('assets/lotties/lottie_audio_message.json');
+
   /// File path: assets/lotties/lottie_file_message.json
   LottieGenImage get lottieFileMessage =>
       const LottieGenImage('assets/lotties/lottie_file_message.json');
@@ -42,9 +50,25 @@ class $AssetsLottiesGen {
   LottieGenImage get lottieLoading =>
       const LottieGenImage('assets/lotties/lottie_loading.json');
 
+  /// File path: assets/lotties/lottie_loading_dots_message.json
+  LottieGenImage get lottieLoadingDotsMessage =>
+      const LottieGenImage('assets/lotties/lottie_loading_dots_message.json');
+
+  /// File path: assets/lotties/lottie_video_message.json
+  LottieGenImage get lottieVideoMessage =>
+      const LottieGenImage('assets/lotties/lottie_video_message.json');
+
   /// List of all assets
-  List<LottieGenImage> get values =>
-      [lottieAppFailure, lottieAppLoading, lottieFileMessage, lottieLoading];
+  List<LottieGenImage> get values => [
+        lottieAppFailure,
+        lottieAppLoading,
+        lottieAudio,
+        lottieAudioMessage,
+        lottieFileMessage,
+        lottieLoading,
+        lottieLoadingDotsMessage,
+        lottieVideoMessage
+      ];
 }
 
 class $AssetsSvgsGen {

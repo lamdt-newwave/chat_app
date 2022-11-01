@@ -48,133 +48,135 @@ class _ProfileAccountChildPageState extends State<ProfileAccountChildPage> {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.r),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 16.h,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  InkWell(
-                    onTap: Get.back,
-                    child: SizedBox(
-                      width: 24.w,
-                      height: 24.h,
-                      child:
-                          AppAssets.svgs.icChevronLeft.svg(fit: BoxFit.cover),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 8.w,
-                  ),
-                  SizedBox(
-                    height: 32.h,
-                    child: Center(
-                      child: Text(
-                        "Your Profile",
-                        style: textTheme.subtitle1,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 60.h,
-              ),
-              Container(
-                width: 100.w,
-                height: 100.w,
-                decoration: const BoxDecoration(
-                    shape: BoxShape.circle, color: AppColors.neutralOffWhite),
-                child: Stack(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.r),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 16.h,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child:
-                          BlocBuilder<ProfileAccountCubit, ProfileAccountState>(
-                        builder: (context, state) {
-                          return state.avatarUrl.isNotEmpty
-                              ? CachedNetworkImage(
-                                  imageBuilder: (context, imageProvider) =>
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: AppColors.neutralSafe,
-                                            gradient: AppGradients.style1),
-                                        child: Padding(
-                                          padding: EdgeInsets.all(5.w),
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(50.r),
-                                            child: Image(
-                                              height: 90.w,
-                                              width: 90.w,
-                                              image: imageProvider,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                  placeholder: (context, url) => AppAssets
-                                      .lotties.lottieAppLoading
-                                      .lottie(),
-                                  imageUrl: state.avatarUrl)
-                              : SizedBox(
-                                  width: 56.w,
-                                  height: 56.h,
-                                  child: AppAssets.svgs.icUser
-                                      .svg(fit: BoxFit.cover),
-                                );
-                        },
+                    InkWell(
+                      onTap: Get.back,
+                      child: SizedBox(
+                        width: 24.w,
+                        height: 24.h,
+                        child:
+                            AppAssets.svgs.icChevronLeft.svg(fit: BoxFit.cover),
                       ),
                     ),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: InkWell(
-                        onTap: _cubit.onPickImage,
-                        child: AppAssets.svgs.icPlusCircle
-                            .svg(width: 24.w, height: 24.h, fit: BoxFit.cover),
+                    SizedBox(
+                      width: 8.w,
+                    ),
+                    SizedBox(
+                      height: 32.h,
+                      child: Center(
+                        child: Text(
+                          "Your Profile",
+                          style: textTheme.subtitle1,
+                        ),
                       ),
                     ),
                   ],
                 ),
-              ),
-              SizedBox(
-                height: 30.h,
-              ),
-              NormalTextField(
-                hintText: "First Name (Required)",
-                onChanged: _cubit.onFirstNameChanged,
-              ),
-              SizedBox(
-                height: 12.h,
-              ),
-              NormalTextField(
-                hintText: "Last Name (Required)",
-                onChanged: _cubit.onLastNameChanged,
-              ),
-              SizedBox(
-                height: 60.h,
-              ),
-              BlocBuilder<ProfileAccountCubit, ProfileAccountState>(
-                builder: (context, state) {
-                  return NormalButton(
-                    backgroundColor: state.isEnableSave
-                        ? AppColors.branchDefault
-                        : AppColors.neutralDisabled,
-                    onPressed: _cubit.onSave,
-                    child: Text(
-                      "Save",
-                      style: textTheme.subtitle2
-                          ?.copyWith(color: AppColors.neutralOffWhite),
-                    ),
-                  );
-                },
-              )
-            ],
+                SizedBox(
+                  height: 60.h,
+                ),
+                Container(
+                  width: 100.w,
+                  height: 100.w,
+                  decoration: const BoxDecoration(
+                      shape: BoxShape.circle, color: AppColors.neutralOffWhite),
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.center,
+                        child: BlocBuilder<ProfileAccountCubit,
+                            ProfileAccountState>(
+                          builder: (context, state) {
+                            return state.avatarUrl.isNotEmpty
+                                ? CachedNetworkImage(
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: AppColors.neutralSafe,
+                                              gradient: AppGradients.style1),
+                                          child: Padding(
+                                            padding: EdgeInsets.all(5.w),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(50.r),
+                                              child: Image(
+                                                height: 90.w,
+                                                width: 90.w,
+                                                image: imageProvider,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                    placeholder: (context, url) => AppAssets
+                                        .lotties.lottieAppLoading
+                                        .lottie(),
+                                    imageUrl: state.avatarUrl)
+                                : SizedBox(
+                                    width: 56.w,
+                                    height: 56.h,
+                                    child: AppAssets.svgs.icUser
+                                        .svg(fit: BoxFit.cover),
+                                  );
+                          },
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: InkWell(
+                          onTap: _cubit.onPickImage,
+                          child: AppAssets.svgs.icPlusCircle.svg(
+                              width: 24.w, height: 24.h, fit: BoxFit.cover),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 30.h,
+                ),
+                NormalTextField(
+                  hintText: "First Name (Required)",
+                  onChanged: _cubit.onFirstNameChanged,
+                ),
+                SizedBox(
+                  height: 12.h,
+                ),
+                NormalTextField(
+                  hintText: "Last Name (Required)",
+                  onChanged: _cubit.onLastNameChanged,
+                ),
+                SizedBox(
+                  height: 60.h,
+                ),
+                BlocBuilder<ProfileAccountCubit, ProfileAccountState>(
+                  builder: (context, state) {
+                    return NormalButton(
+                      backgroundColor: state.isEnableSave
+                          ? AppColors.branchDefault
+                          : AppColors.neutralDisabled,
+                      onPressed: _cubit.onSave,
+                      child: Text(
+                        "Save",
+                        style: textTheme.subtitle2
+                            ?.copyWith(color: AppColors.neutralOffWhite),
+                      ),
+                    );
+                  },
+                )
+              ],
+            ),
           ),
         ),
       ),

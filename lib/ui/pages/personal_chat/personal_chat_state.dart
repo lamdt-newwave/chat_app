@@ -6,8 +6,10 @@ class PersonalChatState extends Equatable {
   final UserEntity? chatUser;
   final RoomEntity room;
   final LoadStatus messageStatus;
+  final String replyingMessageId;
 
   PersonalChatState({
+    this.replyingMessageId = "",
     this.messages = const [],
     this.chatUser,
     RoomEntity? room,
@@ -24,8 +26,10 @@ class PersonalChatState extends Equatable {
     RoomEntity? room,
     UserEntity? chatUser,
     LoadStatus? messageStatus,
+    String? replyingMessageId,
   }) {
     return PersonalChatState(
+      replyingMessageId: replyingMessageId ?? this.replyingMessageId,
       room: room ?? this.room,
       chatUser: chatUser ?? this.chatUser,
       messages: messages ?? this.messages,
@@ -35,11 +39,13 @@ class PersonalChatState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
+  List<Object?> get props =>
+      [
         fetchRoomDataStatus,
         messages,
         chatUser,
         room,
         messageStatus,
+        replyingMessageId,
       ];
 }

@@ -58,12 +58,12 @@ class UserRepositoryImpl extends UserRepository {
 
   @override
   Future<UserEntity> getUserById(String uId) async {
-    CollectionReference users =
-        FirebaseFirestore.instance.collection(AppConstants.usersKey);
-    final userDoc = await users.doc(uId).get();
-    var user = UserEntity.fromJsonWithoutUid(
-      userDoc.data() as Map<String, dynamic>,
-    );
+    final DocumentSnapshot<Map<String, dynamic>> userDoc =
+        await FirebaseFirestore.instance
+            .collection(AppConstants.usersKey)
+            .doc(uId)
+            .get();
+    var user = UserEntity.fromJsonWithoutUid(userDoc.data()!);
     user = user.copyWith(uId: uId);
     return user;
   }
