@@ -60,5 +60,13 @@ class ChatsCubit extends Cubit<ChatsState> {
       final result = await chatRepository.fetchRooms(authRepository.getUid());
       emit(state.copyWith(fetchRoomsStatus: LoadStatus.success, rooms: result));
     });
+
+    FirebaseFirestore.instance
+        .collection(AppConstants.messagesKey)
+        .snapshots()
+        .listen((querySnapshot) async {
+      final result = await chatRepository.fetchRooms(authRepository.getUid());
+      emit(state.copyWith(fetchRoomsStatus: LoadStatus.success, rooms: result));
+    });
   }
 }

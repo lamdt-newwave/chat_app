@@ -42,6 +42,8 @@ class UserRepositoryImpl extends UserRepository {
 
   @override
   Future<List<UserEntity>> fetchUsersWithoutUid(String uId) async {
+    if (uId.isEmpty) return [];
+
     final usersCollection = await FirebaseFirestore.instance
         .collection(AppConstants.usersKey)
         .get();

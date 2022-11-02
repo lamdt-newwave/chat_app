@@ -1,5 +1,6 @@
 import 'package:chat_app/models/entities/message_entity.dart';
 import 'package:chat_app/models/entities/user_entity.dart';
+import 'package:chat_app/models/enums/message_type.dart';
 import 'package:chat_app/repositories/auth_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -41,8 +42,14 @@ class RoomEntity {
     if (lastMessage.text.isNotEmpty) {
       return lastMessage.text;
     } else {
-      if (lastMessage.type.contains("image/")) {
+      if (lastMessage.type == MessageType.image.toString()) {
         return "Image";
+      } else if (lastMessage.type == MessageType.file.toString()) {
+        return "File";
+      } else if (lastMessage.type == MessageType.video.toString()) {
+        return "Video";
+      } else if (lastMessage.type == MessageType.audio.toString()) {
+        return "Audio";
       } else {
         return "Something. Don't know!!! ";
       }

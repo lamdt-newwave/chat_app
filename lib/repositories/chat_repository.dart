@@ -100,14 +100,17 @@ class ChatRepositoryImpl extends ChatRepository {
 
   @override
   Future<RoomEntity> addNewRoom(String chatUserId) async {
-    final roomId = (await rooms.add({
+   final temp = await rooms.add({
       "createdTime": Timestamp.now(),
       "updatedTime": Timestamp.now(),
       "participants": [authRepository.getUid(), chatUserId]
-    }))
-        .id;
-
-    return RoomEntity(roomId: roomId);
+    });
+    List<UserEntity> participants = [];
+    final UserEntity user =
+        await userRepository.getUserById(authRepository.getUid());
+    final chatUser = await userRepository.getUserById(chatUserId);
+    participants.addAll([user, chatUser]);
+    return RoomEntity(roomId: temp.id, participants: participants);
   }
 
   @override

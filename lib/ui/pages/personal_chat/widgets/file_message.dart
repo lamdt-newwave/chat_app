@@ -16,11 +16,13 @@ class FileMessage extends StatelessWidget {
     return InkWell(
       onTap: () {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PdfScreen(
-                      url: message.mediaUrl,
-                    )));
+          context,
+          MaterialPageRoute(
+            builder: (context) => PdfScreen(
+              url: message.mediaUrl,
+            ),
+          ),
+        );
       },
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -34,9 +36,15 @@ class FileMessage extends StatelessWidget {
           SizedBox(
             width: 8.w,
           ),
-          Text(
-            message.mediaUrl.split("/").last.split("?").first,
-            overflow: TextOverflow.ellipsis,
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              minWidth: MediaQuery.of(context).size.width * 0.2,
+              maxWidth: MediaQuery.of(context).size.width * 0.4,
+            ),
+            child: Text(
+              message.mediaUrl.split("/").last.split("?").first,
+              overflow: TextOverflow.fade,
+            ),
           ),
         ],
       ),

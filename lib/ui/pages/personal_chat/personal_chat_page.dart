@@ -41,7 +41,6 @@ class PersonalChatChildPage extends StatefulWidget {
 
 class _PersonalChatChildPageState extends State<PersonalChatChildPage> {
   late final PersonalChatCubit _cubit;
-  late final ChatUser user;
   late final AppStream appStream;
 
   @override
@@ -51,7 +50,6 @@ class _PersonalChatChildPageState extends State<PersonalChatChildPage> {
     appStream.startStream();
     _cubit = context.read<PersonalChatCubit>();
     _cubit.fetchInitData(appStream);
-    user = ChatUser(id: context.read<AppCubit>().state.user!.uId);
   }
 
   @override

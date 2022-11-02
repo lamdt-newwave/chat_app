@@ -2,6 +2,7 @@ import 'package:chat_app/blocs/app/app_cubit.dart';
 import 'package:chat_app/generated/common/assets.gen.dart';
 import 'package:chat_app/generated/common/colors.gen.dart';
 import 'package:chat_app/models/enums/load_status.dart';
+import 'package:chat_app/repositories/auth_repository.dart';
 import 'package:chat_app/repositories/user_repository.dart';
 import 'package:chat_app/routes/app_routes.dart';
 import 'package:chat_app/ui/pages/contacts/contacts_cubit.dart';
@@ -22,7 +23,8 @@ class ContactsPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => ContactsCubit(
           userRepository: RepositoryProvider.of<UserRepository>(context),
-          appCubit: context.read<AppCubit>()),
+          appCubit: context.read<AppCubit>(),
+          authRepository: RepositoryProvider.of<AuthRepository>(context)),
       child: const ContactsChildPage(),
     );
   }

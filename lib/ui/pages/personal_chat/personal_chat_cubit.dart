@@ -71,6 +71,7 @@ class PersonalChatCubit extends Cubit<PersonalChatState> {
           );
         } else {
           RoomEntity room = await chatRepository.addNewRoom(chatUserId);
+          await Future.delayed(const Duration(milliseconds: 500));
           emit(
             state.copyWith(
               chatUser: chatUser,

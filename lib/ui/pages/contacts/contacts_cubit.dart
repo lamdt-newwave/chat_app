@@ -3,6 +3,7 @@ import 'package:chat_app/blocs/app/app_cubit.dart';
 import 'package:chat_app/common/constants.dart';
 import 'package:chat_app/models/entities/user_entity.dart';
 import 'package:chat_app/models/enums/load_status.dart';
+import 'package:chat_app/repositories/auth_repository.dart';
 import 'package:chat_app/repositories/user_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
@@ -11,8 +12,10 @@ part 'contacts_state.dart';
 
 class ContactsCubit extends Cubit<ContactsState> {
   final AppCubit appCubit;
+  final AuthRepository authRepository;
 
   ContactsCubit({
+    required this.authRepository,
     required this.userRepository,
     required this.appCubit,
   }) : super(const ContactsState());
@@ -38,7 +41,7 @@ class ContactsCubit extends Cubit<ContactsState> {
         .snapshots()
         .listen((querySnapshot) async {
       final result =
-          await userRepository.fetchUsersWithoutUid(appCubit.state.user!.uId);
+          await userRepository.fetchUsersWithoutUid(authRepository.getUid());
       emit(state.copyWith(fetchUsersStatus: LoadStatus.success, users: result));
     });
   }
