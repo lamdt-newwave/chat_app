@@ -34,7 +34,9 @@ class _AudioMessageState extends State<AudioMessage> {
     player.playbackEventStream.listen((event) {
       if (mounted) setState(() {});
     });
+
     duration = await player.setUrl(widget.message.mediaUrl) ?? Duration.zero;
+    player.setVolume(3.0);
   }
 
   @override

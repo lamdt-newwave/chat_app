@@ -11,8 +11,10 @@ class MessageEntity {
   final String type;
   final Timestamp updatedTime;
   final String mediaUrl;
+  final String thumbnailUrl;
 
   MessageEntity({
+    this.thumbnailUrl = "",
     this.repliedMessageId = "",
     this.messageId = "",
     required this.authorId,
@@ -27,6 +29,7 @@ class MessageEntity {
 
   Map<String, dynamic> toJson() {
     return {
+      'thumbnailUrl': thumbnailUrl,
       'repliedMessageId': repliedMessageId,
       'messageId': messageId,
       'authorId': authorId,
@@ -42,6 +45,7 @@ class MessageEntity {
 
   Map<String, dynamic> toJsonWithoutMessageId() {
     return {
+      'thumbnailUrl': thumbnailUrl,
       'repliedMessageId': repliedMessageId,
       'authorId': authorId,
       'createdTime': createdTime,
@@ -56,6 +60,7 @@ class MessageEntity {
 
   static MessageEntity fromJson(Map<String, dynamic> json) {
     return MessageEntity(
+      thumbnailUrl: json['thumbnailUrl'],
       repliedMessageId: json['repliedMessageId'],
       authorId: json["authorId"],
       createdTime: json["createdTime"],
@@ -79,8 +84,10 @@ class MessageEntity {
     Timestamp? updatedTime,
     String? mediaUrl,
     String? repliedMessageId,
+    String? thumbnailUrl,
   }) {
     return MessageEntity(
+      thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
       messageId: messageId ?? this.messageId,
       repliedMessageId: repliedMessageId ?? this.repliedMessageId,
       authorId: authorId ?? this.authorId,

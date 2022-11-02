@@ -17,6 +17,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:mime/mime.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 part 'personal_chat_state.dart';
 
@@ -37,6 +39,7 @@ class PersonalChatCubit extends Cubit<PersonalChatState> {
       final String roomId = Get.parameters["roomId"] ?? "";
       final String chatUserId = Get.parameters["chatUserId"] ?? "";
       // Navigate from chats page
+
       if (roomId.isNotEmpty) {
         final room = await chatRepository.getRoomById(roomId);
         final UserEntity chatUser =
@@ -146,11 +149,15 @@ class PersonalChatCubit extends Cubit<PersonalChatState> {
   }
 
   Future<List<MessageEntity>> sendMessage(
-      {String text = "", String url = "", required MessageType type}) async {
+      {String text = "",
+      String url = "",
+      required MessageType type,
+      String thumbnailUrl = ""}) async {
     final result = await chatRepository.addNewMessage(
       MessageEntity(
           repliedMessageId: state.replyingMessageId,
           text: text,
+          thumbnailUrl: thumbnailUrl,
           type: type.toString(),
           authorId: authRepository.getUid(),
           createdTime: Timestamp.now(),
@@ -187,6 +194,7 @@ class PersonalChatCubit extends Cubit<PersonalChatState> {
               state.copyWith(
                 room: state.room.copyWith(messages: messages),
                 messageStatus: LoadStatus.success,
+                replyingMessageId: "",
               ),
             );
           });
@@ -201,20 +209,36 @@ class PersonalChatCubit extends Cubit<PersonalChatState> {
               state.copyWith(
                 room: state.room.copyWith(messages: messages),
                 messageStatus: LoadStatus.success,
+                replyingMessageId: "",
               ),
             );
           });
         } else if (fileType == "video") {
           final audioRef =
               storageRef.child("videos/${result.files.single.name}");
+
+          final thumbnailFilePath = await VideoThumbnail.thumbnailFile(
+            video: result.files.single.path!,
+            thumbnailPath: (await getTemporaryDirectory()).path,
+            imageFormat: ImageFormat.JPEG,
+            maxWidth: 240,
+            quality: 75,
+          );
+          File thumbnailFile = File(thumbnailFilePath!);
+          final imageRef =
+              storageRef.child("images/${thumbnailFile.path.split("/").last}");
+          await imageRef.putFile(thumbnailFile);
           await audioRef.putFile(file).then((taskSnapShot) async {
             final url = await audioRef.getDownloadURL();
-            final List<MessageEntity> messages =
-                await sendMessage(type: MessageType.video, url: url);
+            final List<MessageEntity> messages = await sendMessage(
+                type: MessageType.video,
+                url: url,
+                thumbnailUrl: await imageRef.getDownloadURL());
             emit(
               state.copyWith(
                 room: state.room.copyWith(messages: messages),
                 messageStatus: LoadStatus.success,
+                replyingMessageId: "",
               ),
             );
           });
@@ -228,6 +252,7 @@ class PersonalChatCubit extends Cubit<PersonalChatState> {
               state.copyWith(
                 room: state.room.copyWith(messages: messages),
                 messageStatus: LoadStatus.success,
+                replyingMessageId: "",
               ),
             );
           });

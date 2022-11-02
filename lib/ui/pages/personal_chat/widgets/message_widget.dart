@@ -4,6 +4,7 @@ import 'package:chat_app/models/entities/message_entity.dart';
 import 'package:chat_app/models/entities/user_entity.dart';
 import 'package:chat_app/models/enums/message_type.dart';
 import 'package:chat_app/ui/pages/personal_chat/widgets/audio_message.dart';
+import 'package:chat_app/ui/pages/personal_chat/widgets/file_message.dart';
 import 'package:chat_app/ui/pages/personal_chat/widgets/image_message.dart';
 import 'package:chat_app/ui/pages/personal_chat/widgets/video_message.dart';
 import 'package:chat_app/utils/date_time_util.dart';
@@ -47,7 +48,10 @@ class MessageWidget extends StatelessWidget {
             margin: EdgeInsets.only(
                 top: isGroupMessages ? 4.h : 10.h, left: 12.w, right: 12.w),
             decoration: BoxDecoration(
-              color: isOwnMessage
+              color: isOwnMessage &&
+                      message.type != MessageType.image.toString() &&
+                      message.type != MessageType.file.toString() &&
+                      message.type != MessageType.video.toString()
                   ? AppColors.branchDefault
                   : AppColors.neutralWhite,
               borderRadius: BorderRadius.only(
@@ -92,6 +96,9 @@ class MessageWidget extends StatelessWidget {
                         ),
                       )
                     : const SizedBox(),
+                SizedBox(
+                  height: 4.h,
+                ),
                 _buildMessageContent(message, context),
                 SizedBox(
                   height: 4.h,
@@ -104,7 +111,10 @@ class MessageWidget extends StatelessWidget {
                       fontFamily: FontFamily.lato,
                       fontStyle: FontStyle.normal,
                       height: 16 / 10,
-                      color: isOwnMessage
+                      color: isOwnMessage &&
+                              message.type != MessageType.image.toString() &&
+                              message.type != MessageType.file.toString() &&
+                              message.type != MessageType.video.toString()
                           ? AppColors.neutralWhite
                           : AppColors.neutralDisabled),
                 ),
@@ -129,9 +139,7 @@ class MessageWidget extends StatelessWidget {
     } else if (message.type == MessageType.video.toString()) {
       return VideoMessage(isOwnMessage: isOwnMessage, message: message);
     } else if (message.type == MessageType.file.toString()) {
-      return const Center(
-        child: Text("File"),
-      );
+      return FileMessage(message: message, isOwnMessage: isOwnMessage);
     } else {
       return const SizedBox();
     }

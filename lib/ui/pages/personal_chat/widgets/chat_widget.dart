@@ -86,9 +86,9 @@ class ChatWidget extends StatelessWidget {
         "Image",
         style: textTheme.bodyText2,
       );
-    } else if (replyingMessage.type == MessageType.image.toString()) {
+    } else if (replyingMessage.type == MessageType.video.toString()) {
       return Text("Video", style: textTheme.bodyText2);
-    } else if (replyingMessage.type == MessageType.image.toString()) {
+    } else if (replyingMessage.type == MessageType.audio.toString()) {
       return Text("Audio", style: textTheme.bodyText2);
     } else {
       return Text("File", style: textTheme.bodyText2);
@@ -100,8 +100,8 @@ class ChatWidget extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       height: 64.h,
-      constraints:
-          BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.12),
+      constraints: BoxConstraints(
+          minHeight: 64.h, maxHeight: MediaQuery.of(context).size.height * 0.3),
       decoration: const BoxDecoration(
         color: AppColors.neutralWhite,
       ),
@@ -121,13 +121,13 @@ class ChatWidget extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.h),
                 child: TextFormField(
+                  maxLines: 10,
                   controller: controller,
                   style: textTheme.bodyText1,
                   onFieldSubmitted: onSend,
                   decoration: InputDecoration(
-                    contentPadding: EdgeInsets.only(
-                      left: 8.w,
-                    ),
+                    contentPadding:
+                        EdgeInsets.only(left: 8.w, top: 8.h, right: 8.w),
                     fillColor: AppColors.neutralOffWhite,
                     filled: true,
                     border: OutlineInputBorder(

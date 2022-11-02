@@ -54,6 +54,10 @@ class $AssetsLottiesGen {
   LottieGenImage get lottieLoadingDotsMessage =>
       const LottieGenImage('assets/lotties/lottie_loading_dots_message.json');
 
+  /// File path: assets/lotties/lottie_pdf.json
+  LottieGenImage get lottiePdf =>
+      const LottieGenImage('assets/lotties/lottie_pdf.json');
+
   /// File path: assets/lotties/lottie_video_message.json
   LottieGenImage get lottieVideoMessage =>
       const LottieGenImage('assets/lotties/lottie_video_message.json');
@@ -67,6 +71,7 @@ class $AssetsLottiesGen {
         lottieFileMessage,
         lottieLoading,
         lottieLoadingDotsMessage,
+        lottiePdf,
         lottieVideoMessage
       ];
 }
