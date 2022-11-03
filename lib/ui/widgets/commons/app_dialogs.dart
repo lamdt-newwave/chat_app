@@ -63,6 +63,7 @@ class AppDialogs {
           ),
         ),
       ),
+      barrierDismissible: false,
     );
   }
 

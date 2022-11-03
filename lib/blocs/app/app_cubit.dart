@@ -19,7 +19,6 @@ class AppCubit extends Cubit<AppState> {
   }
 
   void signOut() {
-    authRepository.signOut();
     userRepository.updateUser(
       state.user!,
       status: 0,
@@ -27,6 +26,7 @@ class AppCubit extends Cubit<AppState> {
         DateTime.now(),
       ),
     );
+    authRepository.signOut();
 
     emit(
       state.copyWith(

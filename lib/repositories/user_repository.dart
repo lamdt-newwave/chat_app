@@ -1,3 +1,5 @@
+
+
 import 'package:chat_app/common/constants.dart';
 import 'package:chat_app/models/entities/user_entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,8 +9,7 @@ abstract class UserRepository {
 
   Future<bool> isExistedUser({required String uId});
 
-  Future<void> updateUser(
-    UserEntity userEntity, {
+  Future<void> updateUser(UserEntity userEntity, {
     String? uId,
     String? lastName,
     String? firstName,
@@ -27,7 +28,7 @@ abstract class UserRepository {
 
 class UserRepositoryImpl extends UserRepository {
   final CollectionReference users =
-      FirebaseFirestore.instance.collection(AppConstants.usersKey);
+  FirebaseFirestore.instance.collection(AppConstants.usersKey);
 
   @override
   Future<void> addUser({required UserEntity userEntity}) {
@@ -49,10 +50,10 @@ class UserRepositoryImpl extends UserRepository {
         .get();
     return usersCollection.docs
         .map((e) {
-          final data = e.data();
-          UserEntity userEntity = UserEntity.fromJsonWithoutUid(data);
-          return userEntity.copyWith(uId: e.id);
-        })
+      final data = e.data();
+      UserEntity userEntity = UserEntity.fromJsonWithoutUid(data);
+      return userEntity.copyWith(uId: e.id);
+    })
         .where((element) => element.uId != uId)
         .cast<UserEntity>()
         .toList();
@@ -65,22 +66,26 @@ class UserRepositoryImpl extends UserRepository {
             .collection(AppConstants.usersKey)
             .doc(uId)
             .get();
-    var user = UserEntity.fromJsonWithoutUid(userDoc.data()!);
-    user = user.copyWith(uId: uId);
-    return user;
+    if (userDoc.exists) {
+      var user = UserEntity.fromJsonWithoutUid(userDoc.data()!);
+      user = user.copyWith(uId: uId);
+      return user;
+    } else {
+      throw Exception("Not found user with id: $uId");
+    }
   }
 
   @override
   Future<void> updateUser(UserEntity userEntity,
       {String? uId,
-      String? lastName,
-      String? firstName,
-      String? avatarUrl,
-      int? status,
-      String? phoneNumber,
-      Timestamp? createdTime,
-      Timestamp? lastTime,
-      String? phoneCode}) {
+        String? lastName,
+        String? firstName,
+        String? avatarUrl,
+        int? status,
+        String? phoneNumber,
+        Timestamp? createdTime,
+        Timestamp? lastTime,
+        String? phoneCode}) {
     final newUser = userEntity.copyWith(
       uId: uId ?? userEntity.uId,
       status: status ?? userEntity.status,
@@ -93,7 +98,7 @@ class UserRepositoryImpl extends UserRepository {
       lastTime: lastTime ?? userEntity.lastTime,
     );
     return users.doc(userEntity.uId).set(
-          newUser.toJsonWithoutUid(),
-        );
+      newUser.toJsonWithoutUid(),
+    );
   }
 }
